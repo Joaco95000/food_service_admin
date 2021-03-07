@@ -5,8 +5,87 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:food_service_admin"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MOBIUS FOOD SERVICE - SISTEMA DE ADMINISTRACIÓN" Height="1000" Width="1200"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Name="vntPrincipal">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="5.5*"/>
+            <RowDefinition Height="0.7*"/>
+        </Grid.RowDefinitions>
+        <Grid Background="White" >
+            <StackPanel VerticalAlignment="Top" Orientation="Vertical">
+                <TabControl x:Name="tabControl" Margin="0,0,-0.4,0.4" Background="White" FontSize="18" BorderBrush="White">
+                    <TabItem Header="USUARIOS" BorderBrush="White" Foreground="#FDFFA317" FontWeight="Bold" FontStyle="Italic">
+                        <TabItem.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                                <GradientStop Color="White" Offset="1"/>
+                            </LinearGradientBrush>
+                        </TabItem.Background>
+
+                    </TabItem>
+                    <TabItem Header="COMENSALES" IsSelected="True" BorderBrush="White" Foreground="#FF949494">
+                        <TabItem.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                                <GradientStop Color="White" Offset="1"/>
+                            </LinearGradientBrush>
+                        </TabItem.Background>
+                        <StackPanel Orientation="Horizontal"/>
+                    </TabItem>
+                    <TabItem Header="SNACK" BorderBrush="White" Foreground="#FF949494">
+                        <TabItem.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                                <GradientStop Color="White" Offset="1"/>
+                            </LinearGradientBrush>
+                        </TabItem.Background>
+
+                    </TabItem>
+                    <TabItem Header="REPORTES" BorderBrush="White" Foreground="#FF949494">
+                        <TabItem.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                                <GradientStop Color="White" Offset="1"/>
+                            </LinearGradientBrush>
+                        </TabItem.Background>
+
+                    </TabItem>
+                </TabControl>
+                <DockPanel Margin="0,10,0,0">
+                    <Button x:Name="btn_nuevo_usuario" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FDFFA317" BorderThickness="2" Foreground="#FF434240" FontSize="16">NUEVO USUARIO</Button>
+                    <Button x:Name="btn_cambiar_password" HorizontalAlignment="Right" Margin="0,0,10,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FDFFA317" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center">CAMBIAR MI CONTRASEÑA</Button>
+                </DockPanel>
+                <Separator Background="#FFA0A0A0" Margin="0,10,0,0" Height="1"></Separator>
+                <DockPanel Margin="0,15,0,0">
+                    <Label Content="Nombre:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
+                    <TextBox x:Name="txt_nombre_buscar" Width="200" HorizontalAlignment="Left" Margin="5,0,5,10" BorderBrush="#FF6E6E6E"></TextBox>
+                    <Label Content="Codigo:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
+                    <TextBox x:Name="txt_codigo_buscar" Width="70" HorizontalAlignment="Left" Margin="5,0,5,10" BorderBrush="#FF6E6E6E"></TextBox>
+                </DockPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" Background="#FFA9B5C8" >
+            <Grid x:Name="gridItems" Grid.Column="1" >
+                <!--<ListBox x:Name="lbUsuarios" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Background="White"/>-->
+                <DataGrid x:Name="dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" CanUserResizeRows="False" IsReadOnly="True" ColumnWidth="Auto" FrozenColumnCount="1" CanUserReorderColumns="False" CanUserResizeColumns="False" ScrollViewer.CanContentScroll="True" HorizontalContentAlignment="Center"  UseLayoutRounding="True" VerticalContentAlignment="Center" RowDetailsVisibilityMode="Visible" SelectionMode="Single" SelectionUnit="CellOrRowHeader" AreRowDetailsFrozen="True"/>
+                
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Button x:Name="btn_exportar_excel" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16">Exportar a Excel</Button>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Label Content="ACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,0,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                <Label x:Name="lb_cantidad_activos" Content="11" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                <Label Content="INACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,5,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                <Label x:Name="lb_cantidad_inactivos" Content="198" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                <Label Content="TOTAL:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,5,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                <Label x:Name="lb_cantidad_total" Content="209" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,10,0" BorderBrush="#FF545252" BorderThickness="1"/>
+            </StackPanel>
+
+        </Grid>
     </Grid>
+
 </Window>
