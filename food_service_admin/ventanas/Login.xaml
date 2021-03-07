@@ -1,0 +1,32 @@
+﻿<Window x:Class="food_service_admin.ventanas.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:food_service_admin.ventanas"
+        mc:Ignorable="d"
+        Title="MOBIUS FOOD SERVICE LOGIN" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <DockPanel VerticalAlignment="Top" Margin="0,0,0,45">
+                <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="48" Margin="0,10,0,0" FontStyle="Italic" Background="White" Foreground="#FFFFA317">Mobius Login</Label>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Center">
+                <Image Margin="45,0,5,0" Width="20" Source="/food_service_admin;component/sources/user-flat.png"/>
+                <Label Margin="0,0,35,0" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold">Usuario:</Label>
+                <TextBox x:Name="txt_usuario" BorderThickness="2" Width="350" BorderBrush="#FFFFA317" FontSize="20"/>
+            </DockPanel>
+            <DockPanel Margin="0,10,0,10" HorizontalAlignment="Center">
+                <Image Margin="45,0,5,0" Width="20" Source="/food_service_admin;component/sources/flat-lock.png"/>
+                <Label Margin="0,0,20,0" HorizontalAlignment="Left" FontSize="20" FontWeight="Bold">Password:</Label>
+                <PasswordBox x:Name="psb_password" BorderThickness="2" Width="350" BorderBrush="#FFFFA317" FontSize="20"/>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Center">
+                <Button x:Name="btn_ingresar" Margin="45,20,0,0" Height="40" Width="500" FontSize="20" FontWeight="Bold" FontStyle="Italic" Background="#FFFFA317" Foreground="White" Click="btn_ingresar_Click">Ingresar</Button>
+            </DockPanel>
+            <DockPanel>
+                <Label x:Name="lbl_mensaje" HorizontalAlignment="Center" Margin="65,30,0,0" Foreground="#FFFFA317" FontWeight="Bold" FontStyle="Italic" FontSize="22" Content="No olvide su contraseña, en caso de perdida &#xD;&#xA;contacte con el administrador del sistema." Width="478"/>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</Window>

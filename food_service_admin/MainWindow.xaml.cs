@@ -28,10 +28,11 @@ namespace food_service_admin
         public MainWindow()
         {
             InitializeComponent();
-            this.Title += " [User name]";
+            this.Title += " ["+ventanas.Login.sesion.Login + " - " + ventanas.Login.sesion.Nombre + " " + ventanas.Login.sesion.Paterno + " " + ventanas.Login.sesion.Materno + "]";
             ListUsuarios = new List<Usuario>();
             ListarUsusarios();
             //LLenarListView();
+            //dg.Columns[5].DisplayIndex = 1;
         }
 
         private void ListarUsusarios()
@@ -39,7 +40,15 @@ namespace food_service_admin
             usuarioImpl = new UsuarioImpl();
             DataTable dt = usuarioImpl.listadoUsuarios();
             dg.ItemsSource = dt.DefaultView;
+
         }
+
+        private void wea()
+        {
+
+        }
+
+
 
         //private void LLenarListView()
         //{

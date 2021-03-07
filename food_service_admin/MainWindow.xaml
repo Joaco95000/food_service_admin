@@ -68,10 +68,24 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Background="#FFA9B5C8" >
-            <Grid x:Name="gridItems" Grid.Column="1" >
+            <Grid x:Name="gridItems"  Grid.Column="1" >
                 <!--<ListBox x:Name="lbUsuarios" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Background="White"/>-->
-                <DataGrid x:Name="dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" CanUserResizeRows="False" IsReadOnly="True" ColumnWidth="Auto" FrozenColumnCount="1" CanUserReorderColumns="False" CanUserResizeColumns="False" ScrollViewer.CanContentScroll="True" HorizontalContentAlignment="Center"  UseLayoutRounding="True" VerticalContentAlignment="Center" RowDetailsVisibilityMode="Visible" SelectionMode="Single" SelectionUnit="CellOrRowHeader" AreRowDetailsFrozen="True"/>
-                
+                <DataGrid x:Name="dg" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" CanUserResizeRows="False" ColumnWidth="auto" ScrollViewer.CanContentScroll="True"  UseLayoutRounding="True"  RowDetailsVisibilityMode="Visible" SelectionMode="Single" SelectionUnit="CellOrRowHeader" AreRowDetailsFrozen="True" FrozenColumnCount="2" CanUserResizeColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button >
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="sources/check.png"/>
+                                        </Button.Background>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
             </Grid>
         </Grid>
         <Grid Grid.Row="2">

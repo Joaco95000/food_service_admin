@@ -12,5 +12,7 @@ namespace Interface
     public interface IUsuario:IDao<Usuario>
     {
         DataTable listadoUsuarios();
+
+        Usuario Login(string user, string password);
     }
 }
