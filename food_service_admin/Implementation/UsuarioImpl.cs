@@ -12,6 +12,80 @@ namespace Implementation
 {
     public class UsuarioImpl : IUsuario
     {
+        public DataTable BuscarPorCodigo(string codigo)
+        {
+            DataTable dt = new DataTable();
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado FROM usuario WHERE id like @codigo+'%'";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+                cmd.Parameters.AddWithValue("@codigo", codigo);
+                dt = DBImplementation.ExecuteDataTableCommand(cmd);
+                if (dt.Rows.Count > 0)
+                {
+                    return dt;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public DataTable BuscarPorNombre(string nombre)
+        {
+            DataTable dt = new DataTable();
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado FROM usuario WHERE nombre like @nombre+'%' OR paterno like @paterno+'%' OR materno like @materno+'%'";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+                cmd.Parameters.AddWithValue("@nombre", nombre);
+                cmd.Parameters.AddWithValue("@paterno", nombre);
+                cmd.Parameters.AddWithValue("@materno", nombre);
+                dt = DBImplementation.ExecuteDataTableCommand(cmd);
+                if (dt.Rows.Count > 0)
+                {
+                    return dt;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public string CambiarEstado(string estadoActual, string id)
+        {
+            string estado="";
+            if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
+            if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
+
+            string query = @"UPDATE usuario SET estado=@ESTADO WHERE id=@ID";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+                cmd.Parameters.AddWithValue("@ESTADO", estado);
+                cmd.Parameters.AddWithValue("@ID", id);
+                DBImplementation.ExecuteDataTableCommand(cmd);
+                return "Cambio realizado con exito";
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            //
+        }
+
         public int Delete(Usuario t)
         {
             throw new NotImplementedException();

@@ -14,5 +14,10 @@ namespace Interface
         DataTable listadoUsuarios();
 
         Usuario Login(string user, string password);
+
+        DataTable BuscarPorNombre(string nombre);
+        DataTable BuscarPorCodigo(string codigo);
+        string CambiarEstado(string estadoActual, string id);
+
     }
 }

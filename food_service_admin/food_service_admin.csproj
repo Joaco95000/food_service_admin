@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ventanas\AddUsuario.xaml.cs">
+      <DependentUpon>AddUsuario.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ventanas\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -70,6 +73,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ventanas\AddUsuario.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ventanas\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,6 +131,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="sources\flat-lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="sources\x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="sources\expandir.png" />
+    <Resource Include="sources\folder.png" />
+    <Resource Include="sources\noFIle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="sources\sinFoto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="sources\warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
