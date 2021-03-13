@@ -17,7 +17,7 @@
         <Grid Background="White" >
             <StackPanel VerticalAlignment="Top" Orientation="Vertical">
                 <TabControl x:Name="tabControl" Margin="0,0,-0.4,0.4" Background="White" FontSize="18" BorderBrush="White">
-                    <TabItem Header="USUARIOS" BorderBrush="White" Foreground="#FDFFA317" FontWeight="Bold" FontStyle="Italic">
+                    <TabItem Header="USUARIOS" IsSelected="True" BorderBrush="White" Foreground="#FDFFA317" FontWeight="Bold" FontStyle="Italic">
                         <TabItem.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -26,7 +26,7 @@
                         </TabItem.Background>
 
                     </TabItem>
-                    <TabItem Header="COMENSALES" IsSelected="True" BorderBrush="White" Foreground="#FF949494">
+                    <TabItem Header="COMENSALES"  BorderBrush="White" Foreground="#FF949494">
                         <TabItem.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -75,15 +75,22 @@
         <Grid Grid.Row="1" Background="#FFA9B5C8"  VerticalAlignment="Top">
             <Grid x:Name="gridItems"  Grid.Column="1" >
                 <!--<ListBox x:Name="lbUsuarios" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Background="White"/>-->
-                <DataGrid x:Name="dg" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" CanUserResizeRows="False" ColumnWidth="auto" ScrollViewer.CanContentScroll="True"  UseLayoutRounding="True"  RowDetailsVisibilityMode="Visible" AreRowDetailsFrozen="True" FrozenColumnCount="2" CanUserResizeColumns="False" IsReadOnly="True" SelectionMode="Single">
+                <DataGrid x:Name="dg" AutoGenerateColumns="False" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" CanUserResizeRows="False" ColumnWidth="auto" ScrollViewer.CanContentScroll="True"  UseLayoutRounding="True"  RowDetailsVisibilityMode="Visible" AreRowDetailsFrozen="True" FrozenColumnCount="2" CanUserResizeColumns="False" IsReadOnly="True" SelectionMode="Single">
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header="Codigo" Binding="{Binding [0]}"/>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image x:Name="imgEstado" Height="15" Width="15" Source="sources/check.png" MouseLeftButtonUp="imgEstado_MouseLeftButtonUp"/>
+                                    <Image x:Name="imgEstado" Height="15" Width="15" Source="{Binding [6]}" MouseLeftButtonUp="imgEstado_MouseLeftButtonUp"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Nombres" Width="350" Binding="{Binding [1]}"/>
+                        <DataGridTextColumn Header="Apellidos" Width="450" Binding="{Binding [2]}"/>
+                        <DataGridTextColumn Header="Documento" Binding="{Binding [3]}"/>
+                        <DataGridTextColumn Header="Fotografia" Binding="{Binding [4]}"/>
+                        <DataGridTextColumn Header="Estado" Width="80" Binding="{Binding [5]}"/>
+
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

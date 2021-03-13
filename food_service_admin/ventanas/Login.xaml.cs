@@ -34,6 +34,7 @@ namespace food_service_admin.ventanas
         {
             string user = txt_usuario.Text;
             string password = psb_password.Password;
+            password = Encrypt.GetMD5(password);
             var userSelected = usuarioImpl.Login(user, password);
             if(userSelected != null)
             {

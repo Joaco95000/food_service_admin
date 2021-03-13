@@ -25,24 +25,62 @@ namespace food_service_admin
     {
         UsuarioImpl usuarioImpl;
         List<Usuario> ListUsuarios;
+        int totalUsuario;
+        int usuariosInactivos;
+        int usuariosActivos;
         public MainWindow()
         {
             InitializeComponent();
-            //this.Title += " ["+ventanas.Login.sesion.Login + " - " + ventanas.Login.sesion.Nombre + " " + ventanas.Login.sesion.Paterno + " " + ventanas.Login.sesion.Materno + "]";
+            this.Title += " ["+ventanas.Login.sesion.Login + " - " + ventanas.Login.sesion.Nombre + " " + ventanas.Login.sesion.Paterno + " " + ventanas.Login.sesion.Materno + "]";
             ListUsuarios = new List<Usuario>();
             ListarUsusarios();
             lbl_mensajes.Content = "Login con exito, se cargaron los datos correctamente";
-            //LLenarListView();
-            //dg.Columns[5].DisplayIndex = 1;
+            lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(76,175,80));
+            totalUsuario = 0;
+            usuariosInactivos = 0;
+            usuariosActivos = 0;
+
         }
 
         private void ListarUsusarios()
         {
             usuarioImpl = new UsuarioImpl();
             DataTable dt = usuarioImpl.listadoUsuarios();
-            dg.ItemsSource = dt.DefaultView;
-            lbl_mensajes.Content = "Listo";
+            DataRow dr;
+            totalUsuario = 0;
+            usuariosInactivos = 0;
+            usuariosActivos = 0;
 
+            foreach (DataRow row in dt.Rows)
+            {
+                DataGridRow rowDatos = new DataGridRow();
+                dr = dt.NewRow();
+                for (int i = 0; i < row.ItemArray.Length; i++)
+                {
+                    dr[i] = row.ItemArray[i].ToString();
+                                        
+                    if (row.ItemArray[5].ToString() == "ACTIVO")
+                    {
+                        //MessageBox.Show(row.ItemArray[5].ToString());
+                        dr[6] += "sources/check.png";
+                    }
+                    if (row.ItemArray[5].ToString() == "INACTIVO")
+                    {
+                        dr[6] += "sources/equis.png";
+                    }
+                    
+                }
+                        
+                if(dr[5].ToString() == "ACTIVO") { usuariosActivos = usuariosActivos + 1; }
+                if(dr[5].ToString() == "INACTIVO") { usuariosInactivos = usuariosInactivos + 1; }
+                dg.Items.Add(dr);
+                totalUsuario = totalUsuario+1;
+                
+
+            }
+            lb_cantidad_total.Content = totalUsuario.ToString();
+            lb_cantidad_activos.Content = usuariosActivos.ToString();
+            lb_cantidad_inactivos.Content = usuariosInactivos.ToString();
         }
 
         private void wea()
@@ -52,18 +90,52 @@ namespace food_service_admin
 
         private void txt_nombre_buscar_TextChanged(object sender, TextChangedEventArgs e)
         {
+            txt_codigo_buscar.Text = "";
             string nombre = txt_nombre_buscar.Text;
             usuarioImpl = new UsuarioImpl();
             DataTable dt = usuarioImpl.BuscarPorNombre(nombre);
             if(dt!=null)
             {
-                dg.ItemsSource = dt.DefaultView;
-                lbl_mensajes.Content = "Usaruios encontrados";
+                limpiarDataGrid();
+                DataRow dr;
+                totalUsuario = 0;
+                usuariosInactivos = 0;
+                usuariosActivos = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    DataGridRow rowDatos = new DataGridRow();
+                    dr = dt.NewRow();
+                    for (int i = 0; i < row.ItemArray.Length; i++)
+                    {
+                        dr[i] = row.ItemArray[i].ToString();
+
+                        if (row.ItemArray[5].ToString() == "ACTIVO")
+                        {
+                            //MessageBox.Show(row.ItemArray[5].ToString());
+                            dr[6] += "sources/check.png";
+                        }
+                        if (row.ItemArray[5].ToString() == "INACTIVO")
+                        {
+                            dr[6] += "sources/equis.png";
+                        }
+
+                    }
+                    if (dr[5].ToString() == "ACTIVO") { usuariosActivos = usuariosActivos + 1; }
+                    if (dr[5].ToString() == "INACTIVO") { usuariosInactivos = usuariosInactivos + 1; }
+                    dg.Items.Add(dr);
+                    totalUsuario = totalUsuario + 1;
+                }
+                lbl_mensajes.Content = "Usuarios encontrados con esta combinación";
+                lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80));
+                lb_cantidad_total.Content = totalUsuario.ToString();
+                lb_cantidad_activos.Content = usuariosActivos.ToString();
+                lb_cantidad_inactivos.Content = usuariosInactivos.ToString();
             }
             else
             {
                 limpiarDataGrid();
-                lbl_mensajes.Content = "Usaruios no encontrados";
+                lbl_mensajes.Content = "Usuarios no encontrados";
+                lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(244, 67, 54));
 
             }
 
@@ -84,13 +156,47 @@ namespace food_service_admin
             DataTable dt = usuarioImpl.BuscarPorCodigo(codigo);
             if (dt != null)
             {
-                dg.ItemsSource = dt.DefaultView;
-                lbl_mensajes.Content = "Usaruios encontrados";
+                limpiarDataGrid();
+                DataRow dr;
+                totalUsuario = 0;
+                usuariosInactivos = 0;
+                usuariosActivos = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    DataGridRow rowDatos = new DataGridRow();
+                    dr = dt.NewRow();
+                    for (int i = 0; i < row.ItemArray.Length; i++)
+                    {
+                        dr[i] = row.ItemArray[i].ToString();
+
+                        if (row.ItemArray[5].ToString() == "ACTIVO")
+                        {
+                            //MessageBox.Show(row.ItemArray[5].ToString());
+                            dr[6] += "sources/check.png";
+                        }
+                        if (row.ItemArray[5].ToString() == "INACTIVO")
+                        {
+                            dr[6] += "sources/equis.png";
+                        }
+
+                    }
+                    if (dr[5].ToString() == "ACTIVO") { usuariosActivos = usuariosActivos + 1; }
+                    if (dr[5].ToString() == "INACTIVO") { usuariosInactivos = usuariosInactivos + 1; }
+                    dg.Items.Add(dr);
+                    totalUsuario = totalUsuario + 1;
+                }
+                lbl_mensajes.Content = "Usuarios encontrados con este codigo";
+                lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80));
+                lb_cantidad_total.Content = totalUsuario.ToString();
+                lb_cantidad_activos.Content = usuariosActivos.ToString();
+                lb_cantidad_inactivos.Content = usuariosInactivos.ToString();
+                txt_nombre_buscar.Text = "";
             }
             else
             {
                 limpiarDataGrid();
-                lbl_mensajes.Content = "Usaruios no encontrados";
+                lbl_mensajes.Content = "Usuarios no encontrados";
+                lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(244, 67, 54));
 
             }
         }
@@ -104,15 +210,18 @@ namespace food_service_admin
         {
             string id="";
             string estadoActual="";
-            foreach (DataRowView item in dg.SelectedItems)
+            foreach (DataRow item in dg.SelectedItems)
             {
-                    id = item.Row.ItemArray[0].ToString();
-                    estadoActual = item.Row.ItemArray[5].ToString();
+                id = item.ItemArray[0].ToString();
+                estadoActual = item.ItemArray[5].ToString();
             }
             usuarioImpl = new UsuarioImpl();
-            lbl_mensajes.Content = usuarioImpl.CambiarEstado(estadoActual,id);
+            lbl_mensajes.Content = usuarioImpl.CambiarEstado(estadoActual, id);
+            lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(63, 81, 181));
             limpiarDataGrid();
             ListarUsusarios();
+            txt_nombre_buscar.Text = "";
+            txt_codigo_buscar.Text = "";
         }
 
 

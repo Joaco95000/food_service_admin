@@ -15,7 +15,7 @@ namespace Implementation
         public DataTable BuscarPorCodigo(string codigo)
         {
             DataTable dt = new DataTable();
-            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado FROM usuario WHERE id like @codigo+'%'";
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado, '' AS Cambiar FROM usuario WHERE id like @codigo+'%'";
             SqlCommand cmd;
             try
             {
@@ -39,7 +39,7 @@ namespace Implementation
         public DataTable BuscarPorNombre(string nombre)
         {
             DataTable dt = new DataTable();
-            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado FROM usuario WHERE nombre like @nombre+'%' OR paterno like @paterno+'%' OR materno like @materno+'%'";
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado,'' AS Cambiar FROM usuario WHERE nombre like @nombre+'%' OR paterno like @paterno+'%' OR materno like @materno+'%'";
             SqlCommand cmd;
             try
             {
@@ -76,7 +76,7 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@ESTADO", estado);
                 cmd.Parameters.AddWithValue("@ID", id);
                 DBImplementation.ExecuteDataTableCommand(cmd);
-                return "Cambio realizado con exito";
+                return "Cambio de estado de "+estadoActual+" a "+estado+" realizado con exito";
             }
             catch (Exception ex)
             {
@@ -98,7 +98,7 @@ namespace Implementation
 
         public DataTable listadoUsuarios()
         {
-            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado FROM usuario";
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado,'' AS Cambiar FROM usuario";
             SqlCommand cmd;
             try
             {
@@ -162,5 +162,7 @@ namespace Implementation
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }
