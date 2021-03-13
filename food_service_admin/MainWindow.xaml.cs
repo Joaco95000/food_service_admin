@@ -24,7 +24,6 @@ namespace food_service_admin
     public partial class MainWindow : Window
     {
         UsuarioImpl usuarioImpl;
-        List<Usuario> ListUsuarios;
         int totalUsuario;
         int usuariosInactivos;
         int usuariosActivos;
@@ -32,7 +31,6 @@ namespace food_service_admin
         {
             InitializeComponent();
             this.Title += " ["+ventanas.Login.sesion.Login + " - " + ventanas.Login.sesion.Nombre + " " + ventanas.Login.sesion.Paterno + " " + ventanas.Login.sesion.Materno + "]";
-            ListUsuarios = new List<Usuario>();
             ListarUsusarios();
             lbl_mensajes.Content = "Login con exito, se cargaron los datos correctamente";
             lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(76,175,80));
@@ -40,6 +38,12 @@ namespace food_service_admin
             usuariosInactivos = 0;
             usuariosActivos = 0;
 
+        }
+
+        public void refrescar()
+        {
+            ListarUsusarios();
+            lbl_mensajes.Content = "Datos actualizados...";
         }
 
         private void ListarUsusarios()
@@ -171,7 +175,6 @@ namespace food_service_admin
 
                         if (row.ItemArray[5].ToString() == "ACTIVO")
                         {
-                            //MessageBox.Show(row.ItemArray[5].ToString());
                             dr[6] += "sources/check.png";
                         }
                         if (row.ItemArray[5].ToString() == "INACTIVO")
@@ -237,39 +240,9 @@ namespace food_service_admin
             ventanaUsuario.Show();
         }
 
-        //private void LLenarListView()
-        //{
-        //    dg.ItemsSource = ListUsuarios;
-        //}
-
-        //private void ListarUsusarios()
-        //{
-        //    usuarioImpl = new UsuarioImpl();
-        //    string foto;
-        //    DataTable dt = usuarioImpl.listadoUsuarios();
-        //    foreach (DataRow dataRow in dt.Rows)
-        //    {
-        //        if (dataRow["fotografia"] == null || dataRow["fotografia"].ToString().Length == 0)
-        //        {
-        //            foto = "NO";
-        //        }
-        //        else
-        //        {
-        //            foto = "SI";
-        //        }
-        //        ListUsuarios.Add(new Usuario()
-        //        {
-        //            Id = int.Parse(dataRow["id"].ToString()),
-        //            Nombre = dataRow["nombre"].ToString(),
-        //            Apellidos = dataRow["paterno"].ToString()+" "+ dataRow["materno"].ToString(),
-        //            Documento = dataRow["documento"].ToString(),
-        //            FotoBool = foto,
-        //            Estado = dataRow["estado"].ToString()
-        //        }); 
-        //    }
-
-
-
-        //}
+        private void btn_refrescar_Click(object sender, RoutedEventArgs e)
+        {
+            refrescar();
+        }
     }
 }

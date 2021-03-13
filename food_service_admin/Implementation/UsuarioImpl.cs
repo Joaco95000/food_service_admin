@@ -96,6 +96,39 @@ namespace Implementation
             throw new NotImplementedException();
         }
 
+        public bool InsertUsuario(Usuario t)
+        {
+            string query = @"INSERT INTO usuario(nombre,paterno,materno,login,password,documento,estado)
+				                           VALUES(@nombre,@paterno,@materno,@login,@password,@documento,@estado)";
+            try
+            {
+                SqlCommand cmd = DBImplementation.CreateBasicCommand(query);
+                //idAux = DBImplementation.GetIdentityFromTable("registro");
+                //t.Fecha = DateTime.Parse(DBImplementation.fechaHoraServidor().ToString("yyy-MM-dd"));
+                //t.Hora = DateTime.Parse(DBImplementation.fechaHoraServidor().ToString("H:m:ss"));
+
+
+                cmd.Parameters.AddWithValue("@nombre", t.Nombre);
+                cmd.Parameters.AddWithValue("@paterno", t.Paterno);
+                cmd.Parameters.AddWithValue("@materno", t.Materno);
+                cmd.Parameters.AddWithValue("@login", t.Login);
+                cmd.Parameters.AddWithValue("@password", t.Password);
+                cmd.Parameters.AddWithValue("@documento", t.Documento);
+                //cmd.Parameters.AddWithValue("@fotografia", t.Fotografia);
+                cmd.Parameters.AddWithValue("@estado", t.Estado);
+                //cmd.Parameters.AddWithValue("@fecha_ingreso", null);
+                //cmd.Parameters.AddWithValue("@fecha_nacimiento", null);
+                //cmd.Parameters.AddWithValue("@cargo", t.Cargo);
+                DBImplementation.ExecuteBasicCommand(cmd);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                return false;
+            };
+        }
+
         public DataTable listadoUsuarios()
         {
             string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado,'' AS Cambiar FROM usuario";

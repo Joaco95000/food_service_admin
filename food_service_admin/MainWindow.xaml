@@ -69,6 +69,12 @@
                             <ImageBrush ImageSource="sources/x.png" Stretch="UniformToFill"/>
                         </Button.Background>
                     </Button>
+                    <Button x:Name="btn_refrescar" HorizontalAlignment="Right" Margin="0,0,10,10" Height="auto" Width="45"  Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Top" Click="btn_refrescar_Click" BorderBrush="{x:Null}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="sources/refrescar.png" Stretch="Uniform"/>
+                        </Button.Background>
+                    </Button>
+
                 </DockPanel>
             </StackPanel>
         </Grid>

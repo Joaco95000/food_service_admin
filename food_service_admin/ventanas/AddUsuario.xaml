@@ -13,20 +13,20 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
                 <Label Content="Nombres:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
-                <TextBox Width="270"></TextBox>
+                <TextBox x:Name="txt_Nombre" Width="270" PreviewTextInput="txt_Nombre_PreviewTextInput"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
                 <Label Content="Apellido Paterno:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
-                <TextBox Width="270"></TextBox>
+                <TextBox x:Name="txt_Paterno" Width="270" PreviewTextInput="txt_Paterno_PreviewTextInput"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
                 <Label Content="Apellido Materno:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
-                <TextBox Width="270"></TextBox>
+                <TextBox x:Name="txt_Materno" Width="270" PreviewTextInput="txt_Materno_PreviewTextInput"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
                 <Label Content="Cedula de Identidad (C.I.):" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
-                <TextBox Width="249"></TextBox>
-                <Button Margin="2,0,0,0" x:Name="btn_limpiar_codigo" Width="20" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" BorderBrush="#FF989999">
+                <TextBox x:Name="txt_carnet" Width="249" KeyDown="txt_carnet_KeyDown"></TextBox>
+                <Button Margin="2,0,0,0" x:Name="btn_limpiar_codigo" Width="20" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" BorderBrush="#FF989999" Click="btn_limpiar_codigo_Click">
                     <Button.Background>
                         <ImageBrush ImageSource="/food_service_admin;component/sources/x.png" Stretch="UniformToFill"/>
                     </Button.Background>
@@ -34,11 +34,11 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center">
                 <Label Content="Nombre de Usuario:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
-                <TextBox Width="270"></TextBox>
+                <TextBox x:Name="txt_NombreUsuario" Width="270"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center">
                 <Label Content="Contraseña:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
-                <PasswordBox Width="270"></PasswordBox>
+                <PasswordBox x:Name="pb_contraseña" Width="270"></PasswordBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center" Cursor="None">
                 <Label Content="Fotografia:" HorizontalContentAlignment="Right" Margin="45,0,5,0"></Label>
@@ -66,7 +66,7 @@
                 <Label Content="La contraseña se establecerá cuando se inicie sesión por primera vez." Foreground="#FFF59D56" FontSize="14"/>
             </StackPanel>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,10,0,0">
-                <Button x:Name="btn_guardar" Width="100" Height="27" Background="#FFFFD28F" Foreground="#FF060606" Margin="0,0,10,0" BorderBrush="White" FontSize="13">Guardar</Button>
+                <Button x:Name="btn_guardar" Width="100" Height="27" Background="#FFFFD28F" Foreground="#FF060606" Margin="0,0,10,0" BorderBrush="White" FontSize="13" Click="btn_guardar_Click">Guardar</Button>
                 <Button x:Name="btn_cerrar" Width="100" Height="27" Background="#FFFFD28F" Foreground="#FF060606" BorderBrush="White" FontSize="13" Click="btn_cerrar_Click">Cerrar</Button>
             </StackPanel>
         </StackPanel>

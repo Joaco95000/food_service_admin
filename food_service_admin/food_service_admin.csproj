@@ -146,5 +146,8 @@
   <ItemGroup>
     <Resource Include="sources\warning.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="sources\refrescar.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
