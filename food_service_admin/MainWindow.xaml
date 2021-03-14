@@ -9,25 +9,105 @@
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
         Name="vntPrincipal">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="0.8*"/>
-        </Grid.RowDefinitions>
         <Grid Background="White" >
-            <StackPanel VerticalAlignment="Top" Orientation="Vertical">
-                <TabControl x:Name="tabControl" Margin="0,0,-0.4,0.4" Background="White" FontSize="18" BorderBrush="White">
-                    <TabItem Header="USUARIOS" IsSelected="True" BorderBrush="White" Foreground="#FDFFA317" FontWeight="Bold" FontStyle="Italic">
+                <TabControl x:Name="tabControl" Margin="0,0,-0.4,0.4" Background="White"  BorderBrush="White">
+                    <TabItem x:Name="ti_usuarios" FontSize="18" IsSelected="True" BorderBrush="White" Foreground="#FDFFA317" GotFocus="ti_usuarios_GotFocus" LostFocus="ti_usuarios_LostFocus">
+                    <TabItem.Header>
+                        <Label x:Name="lbl_usuarios_header" Content="USUARIOS" Foreground="#FFFFA51B" FontWeight="Bold" FontStyle="Italic"></Label>
+                    </TabItem.Header>
                         <TabItem.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFF0F0F0" Offset="0"/>
                                 <GradientStop Color="White" Offset="1"/>
                             </LinearGradientBrush>
                         </TabItem.Background>
+                        <!--Contenido usuarios-->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="4.2*"/>
+                                    <RowDefinition Height="0.7*"/>
+                                </Grid.RowDefinitions>
+                                <!--fin grid-->
+                                <!--inicio cabecera sin joder-->
+                                <Grid Grid.Row="0">
+                                    <StackPanel>
+                                        <DockPanel Margin="0,10,0,0">
+                                            <Button x:Name="btn_nuevo_usuario" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FDFFA317" BorderThickness="2" Foreground="#FF434240" FontSize="16" Click="btn_nuevo_usuario_Click">NUEVO USUARIO</Button>
+                                            <Button x:Name="btn_cambiar_password" HorizontalAlignment="Right" Margin="0,0,10,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FDFFA317" BorderThickness="2" Foreground="#FF434240" FontSize="14" VerticalContentAlignment="Center">CAMBIAR MI CONTRASEÑA</Button>
+                                        </DockPanel>
+                                        <Separator Background="#FFA0A0A0" Margin="0,10,0,0" Height="1"></Separator>
+                                        <DockPanel Margin="0,15,0,0">
+                                            <Label Content="Nombre:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
+                                            <TextBox x:Name="txt_nombre_buscar" Width="200" HorizontalAlignment="Left" Margin="5,0,5,10" BorderBrush="#FF6E6E6E" TextChanged="txt_nombre_buscar_TextChanged" FontSize="18" VerticalContentAlignment="Center"/>
+                                            <Label Content="Codigo:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
+                                            <TextBox x:Name="txt_codigo_buscar" Width="70" HorizontalAlignment="Left" Margin="5,0,0,10" BorderBrush="#FF6E6E6E" VerticalContentAlignment="Center" FontSize="18" KeyDown="txt_codigo_buscar_KeyDown" TextChanged="txt_codigo_buscar_TextChanged"/>
+                                            <Button x:Name="btn_limpiar_codigo" Width="20" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Click="btn_limpiar_codigo_Click">
+                                                <Button.Background>
+                                                    <ImageBrush ImageSource="sources/x.png" Stretch="UniformToFill"/>
+                                                </Button.Background>
+                                            </Button>
+                                            <Button x:Name="btn_refrescar" HorizontalAlignment="Right" Margin="0,0,10,10" Height="auto" Width="45"  Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Top" Click="btn_refrescar_Click" BorderBrush="{x:Null}">
+                                                <Button.Background>
+                                                    <ImageBrush ImageSource="sources/refrescar.png" Stretch="Uniform"/>
+                                                </Button.Background>
+                                            </Button>
 
+                                        </DockPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <!--fin cabecera sin joder-->
+                                <!--Inicio datagri sin joder-->
+                                <Grid Grid.Row="1">
+                                    <DataGrid x:Name="dg"  AutoGenerateColumns="False" Background="White" CanUserResizeRows="False" SelectionMode="Single" CanUserReorderColumns="False" CanUserResizeColumns="False" EnableRowVirtualization="False" IsReadOnly="True" FontSize="14">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Codigo" Binding="{Binding [0]}"/>
+                                            <DataGridTemplateColumn>
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Image x:Name="imgEstado" Height="15" Width="15" Source="{Binding [6]}" MouseLeftButtonUp="imgEstado_MouseLeftButtonUp"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTextColumn Header="Nombres" Width="*" Binding="{Binding [1]}"/>
+                                            <DataGridTextColumn Header="Apellidos" Width="*" Binding="{Binding [2]}"/>
+                                            <DataGridTextColumn Header="Documento" Binding="{Binding [3]}"/>
+                                            <DataGridTextColumn Header="Fotografia" Binding="{Binding [4]}"/>
+                                            <DataGridTextColumn Header="Estado" Width="80" Binding="{Binding [5]}"/>
+
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                                <!--Fin datagrid sin joder-->
+                                <!--Inicio final son joder-->
+                                <Grid Grid.Row="2"  VerticalAlignment="top" HorizontalAlignment="Stretch">
+                                    <StackPanel Orientation="Vertical">
+                                        <DockPanel Margin="0,15,0,0">
+                                            <Button x:Name="btn_exportar_excel" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16">Exportar a Excel</Button>
+                                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                                <Label Content="ACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,0,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                                                <Label x:Name="lb_cantidad_activos" Content="11" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                                                <Label Content="INACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,5,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                                                <Label x:Name="lb_cantidad_inactivos" Content="198" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                                                <Label Content="TOTAL:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,5,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                                                <Label x:Name="lb_cantidad_total" Content="209" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,10,0" BorderBrush="#FF545252" BorderThickness="1"/>
+                                            </StackPanel>
+                                        </DockPanel>
+                                        <DockPanel>
+                                            <Label x:Name="lbl_mensajes" Margin="0,6,0,0" Padding="15,0,0,0" Height="25" FontSize="16" FontWeight="Bold" Background="#FFFFA51B" Foreground="White" Content=""/>
+                                        </DockPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <!--Fin final sin joder-->
+                            </Grid>
+
+                        <!--Fin Contenido usuarios-->
                     </TabItem>
-                    <TabItem Header="COMENSALES"  BorderBrush="White" Foreground="#FF949494">
-                        <TabItem.Background>
+                    <TabItem x:Name="ti_comensales"  BorderBrush="White" Foreground="#FF949494" GotFocus="ti_comensales_GotFocus" LostFocus="ti_comensales_LostFocus">
+                    <TabItem.Header>
+                        <Label x:Name="lbl_comensales_header" Content="COMENSALES" Foreground="#FF949499" FontSize="15"></Label>
+                    </TabItem.Header>
+                    <TabItem.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFF0F0F0" Offset="0"/>
                                 <GradientStop Color="White" Offset="1"/>
@@ -35,8 +115,11 @@
                         </TabItem.Background>
                         <StackPanel Orientation="Horizontal"/>
                     </TabItem>
-                    <TabItem Header="SNACK" BorderBrush="White" Foreground="#FF949494">
-                        <TabItem.Background>
+                    <TabItem x:Name="ti_snack" BorderBrush="White" Foreground="#FF949494" LostFocus="ti_snack_LostFocus" GotFocus="ti_snack_GotFocus">
+                    <TabItem.Header>
+                        <Label x:Name="lbl_snack_header" Content="SNACK" Foreground="#FF949499" FontSize="15"></Label>
+                    </TabItem.Header>
+                    <TabItem.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFF0F0F0" Offset="0"/>
                                 <GradientStop Color="White" Offset="1"/>
@@ -44,81 +127,22 @@
                         </TabItem.Background>
 
                     </TabItem>
-                    <TabItem Header="REPORTES" BorderBrush="White" Foreground="#FF949494">
-                        <TabItem.Background>
+                    <TabItem x:Name="ti_reportes" BorderBrush="White" Foreground="#FF949494" GotFocus="ti_reportes_GotFocus" LostFocus="ti_reportes_LostFocus">
+                    <TabItem.Header>
+                        <Label x:Name="lbl_reportes_header" Content="REPORTES" Foreground="#FF949499" FontSize="15"></Label>
+                    </TabItem.Header>
+                    <TabItem.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                 <GradientStop Color="#FFF0F0F0" Offset="0"/>
                                 <GradientStop Color="White" Offset="1"/>
                             </LinearGradientBrush>
                         </TabItem.Background>
+                        <!--COntenido reportes-->
 
+                        <!--fin COntenido reportes-->
                     </TabItem>
                 </TabControl>
-                <DockPanel Margin="0,10,0,0">
-                    <Button x:Name="btn_nuevo_usuario" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FDFFA317" BorderThickness="2" Foreground="#FF434240" FontSize="16" Click="btn_nuevo_usuario_Click">NUEVO USUARIO</Button>
-                    <Button x:Name="btn_cambiar_password" HorizontalAlignment="Right" Margin="0,0,10,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FDFFA317" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center">CAMBIAR MI CONTRASEÑA</Button>
-                </DockPanel>
-                <Separator Background="#FFA0A0A0" Margin="0,10,0,0" Height="1"></Separator>
-                <DockPanel Margin="0,15,0,0">
-                    <Label Content="Nombre:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
-                    <TextBox x:Name="txt_nombre_buscar" Width="200" HorizontalAlignment="Left" Margin="5,0,5,10" BorderBrush="#FF6E6E6E" TextChanged="txt_nombre_buscar_TextChanged" FontSize="18" VerticalContentAlignment="Center"/>
-                    <Label Content="Codigo:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
-                    <TextBox x:Name="txt_codigo_buscar" Width="70" HorizontalAlignment="Left" Margin="5,0,0,10" BorderBrush="#FF6E6E6E" VerticalContentAlignment="Center" FontSize="18" KeyDown="txt_codigo_buscar_KeyDown" TextChanged="txt_codigo_buscar_TextChanged"/>
-                    <Button x:Name="btn_limpiar_codigo" Width="20" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Click="btn_limpiar_codigo_Click">
-                        <Button.Background>
-                            <ImageBrush ImageSource="sources/x.png" Stretch="UniformToFill"/>
-                        </Button.Background>
-                    </Button>
-                    <Button x:Name="btn_refrescar" HorizontalAlignment="Right" Margin="0,0,10,10" Height="auto" Width="45"  Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Top" Click="btn_refrescar_Click" BorderBrush="{x:Null}">
-                        <Button.Background>
-                            <ImageBrush ImageSource="sources/refrescar.png" Stretch="Uniform"/>
-                        </Button.Background>
-                    </Button>
-
-                </DockPanel>
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Row="1" Background="#FFA9B5C8"  VerticalAlignment="Top">
-            <Grid x:Name="gridItems"  Grid.Column="1" >
-                <!--<ListBox x:Name="lbUsuarios" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Background="White"/>-->
-                <DataGrid x:Name="dg" AutoGenerateColumns="False" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" CanUserResizeRows="False" ColumnWidth="auto" ScrollViewer.CanContentScroll="True"  UseLayoutRounding="True"  RowDetailsVisibilityMode="Visible" AreRowDetailsFrozen="True" FrozenColumnCount="2" CanUserResizeColumns="False" IsReadOnly="True" SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Codigo" Binding="{Binding [0]}"/>
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image x:Name="imgEstado" Height="15" Width="15" Source="{Binding [6]}" MouseLeftButtonUp="imgEstado_MouseLeftButtonUp"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Nombres" Width="350" Binding="{Binding [1]}"/>
-                        <DataGridTextColumn Header="Apellidos" Width="450" Binding="{Binding [2]}"/>
-                        <DataGridTextColumn Header="Documento" Binding="{Binding [3]}"/>
-                        <DataGridTextColumn Header="Fotografia" Binding="{Binding [4]}"/>
-                        <DataGridTextColumn Header="Estado" Width="80" Binding="{Binding [5]}"/>
-
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </Grid>
-        <Grid Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-            <StackPanel Orientation="Vertical">
-                <DockPanel Margin="0,15,0,0">
-                    <Button x:Name="btn_exportar_excel" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16">Exportar a Excel</Button>
-                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                        <Label Content="ACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,0,0" BorderBrush="#FF545252" BorderThickness="1"/>
-                        <Label x:Name="lb_cantidad_activos" Content="11" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
-                        <Label Content="INACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,5,0" BorderBrush="#FF545252" BorderThickness="1"/>
-                        <Label x:Name="lb_cantidad_inactivos" Content="198" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
-                        <Label Content="TOTAL:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,5,0" BorderBrush="#FF545252" BorderThickness="1"/>
-                        <Label x:Name="lb_cantidad_total" Content="209" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,10,0" BorderBrush="#FF545252" BorderThickness="1"/>
-                    </StackPanel>
-                </DockPanel>
-                <DockPanel>
-                    <Label x:Name="lbl_mensajes" Margin="0,6,0,0" Padding="15,0,0,0" Height="25" FontSize="16" FontWeight="Bold" Background="#FFFFA51B" Foreground="White" Content=""/>
-                </DockPanel>
-            </StackPanel>
+            
         </Grid>
     </Grid>
-
 </Window>

@@ -244,5 +244,93 @@ namespace food_service_admin
         {
             refrescar();
         }
+
+        #region Style
+
+        private void ti_reportes_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+            lbl_usuarios_header.Foreground = new SolidColorBrush(Color.FromRgb(148, 148, 153));
+            lbl_usuarios_header.FontSize = 15;
+            lbl_usuarios_header.FontStyle = FontStyles.Normal;
+            lbl_usuarios_header.FontWeight = FontWeights.Normal;
+            lbl_reportes_header.Foreground = new SolidColorBrush(Color.FromRgb(255, 165, 27));
+            lbl_reportes_header.FontSize = 18;
+            lbl_reportes_header.FontStyle = FontStyles.Italic;
+            lbl_reportes_header.FontWeight = FontWeights.Bold;
+        }
+
+        private void ti_reportes_LostFocus(object sender, RoutedEventArgs e)
+        {
+            lbl_reportes_header.Foreground = new SolidColorBrush(Color.FromRgb(148, 148, 153));
+            lbl_reportes_header.FontSize = 15;
+            lbl_reportes_header.FontStyle = FontStyles.Normal;
+            lbl_reportes_header.FontWeight = FontWeights.Normal;
+
+        }
+
+        private void ti_usuarios_GotFocus(object sender, RoutedEventArgs e)
+        {
+            lbl_usuarios_header.Foreground = new SolidColorBrush(Color.FromRgb(255, 165, 27));
+            lbl_usuarios_header.FontSize = 18;
+            lbl_usuarios_header.FontStyle = FontStyles.Italic;
+            lbl_usuarios_header.FontWeight = FontWeights.Bold;
+        }
+
+        private void ti_usuarios_LostFocus(object sender, RoutedEventArgs e)
+        {
+            lbl_usuarios_header.Foreground = new SolidColorBrush(Color.FromRgb(148, 148, 153));
+            lbl_usuarios_header.FontSize = 15;
+            lbl_usuarios_header.FontStyle = FontStyles.Normal;
+            lbl_usuarios_header.FontWeight = FontWeights.Normal;
+        }
+
+
+
+        private void ti_comensales_GotFocus(object sender, RoutedEventArgs e)
+        {
+            lbl_usuarios_header.Foreground = new SolidColorBrush(Color.FromRgb(148, 148, 153));
+            lbl_usuarios_header.FontSize = 15;
+            lbl_usuarios_header.FontStyle = FontStyles.Normal;
+            lbl_usuarios_header.FontWeight = FontWeights.Normal;
+            lbl_comensales_header.Foreground = new SolidColorBrush(Color.FromRgb(255, 165, 27));
+            lbl_comensales_header.FontSize = 18;
+            lbl_comensales_header.FontStyle = FontStyles.Italic;
+            lbl_comensales_header.FontWeight = FontWeights.Bold;
+        }
+
+        private void ti_comensales_LostFocus(object sender, RoutedEventArgs e)
+        {
+            lbl_comensales_header.Foreground = new SolidColorBrush(Color.FromRgb(148, 148, 153));
+            lbl_comensales_header.FontSize = 15;
+            lbl_comensales_header.FontStyle = FontStyles.Normal;
+            lbl_comensales_header.FontWeight = FontWeights.Normal;
+        }
+
+        private void ti_snack_LostFocus(object sender, RoutedEventArgs e)
+        {
+            lbl_snack_header.Foreground = new SolidColorBrush(Color.FromRgb(148, 148, 153));
+            lbl_snack_header.FontSize = 15;
+            lbl_snack_header.FontStyle = FontStyles.Normal;
+            lbl_snack_header.FontWeight = FontWeights.Normal;
+        }
+
+        private void ti_snack_GotFocus(object sender, RoutedEventArgs e)
+        {
+            lbl_usuarios_header.Foreground = new SolidColorBrush(Color.FromRgb(148, 148, 153));
+            lbl_usuarios_header.FontSize = 15;
+            lbl_usuarios_header.FontStyle = FontStyles.Normal;
+            lbl_usuarios_header.FontWeight = FontWeights.Normal;
+            lbl_snack_header.Foreground = new SolidColorBrush(Color.FromRgb(255, 165, 27));
+            lbl_snack_header.FontSize = 18;
+            lbl_snack_header.FontStyle = FontStyles.Italic;
+            lbl_snack_header.FontWeight = FontWeights.Bold;
+        }
+
+        #endregion 
     }
+
+
+
+
 }
