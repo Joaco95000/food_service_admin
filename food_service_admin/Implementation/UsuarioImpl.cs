@@ -15,7 +15,7 @@ namespace Implementation
         public DataTable BuscarPorCodigo(string codigo)
         {
             DataTable dt = new DataTable();
-            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado, '' AS Cambiar FROM usuario WHERE id like @codigo+'%'";
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado, '' AS Cambiar FROM usuario WHERE id like @codigo+'_%'";
             SqlCommand cmd;
             try
             {
