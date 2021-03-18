@@ -1,0 +1,81 @@
+﻿<Window x:Class="food_service_admin.ventanas.AddCliente"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:food_service_admin.ventanas"
+        mc:Ignorable="d"
+        Title="Mobius Food Service: Nuevo comensal" Height="510" Width="520" BorderBrush="#FFEF8F00" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Agregar Nuevo Comensal" Foreground="#FFEF8F00" FontWeight="Bold" FontSize="16"></Label>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
+                <Label Content="Nombres:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <TextBox x:Name="txt_Nombre" Width="270" PreviewTextInput="txt_Nombre_PreviewTextInput"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <Label Content="Apellido Paterno:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <TextBox x:Name="txt_Paterno" Width="270" PreviewTextInput="txt_Paterno_PreviewTextInput"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <Label Content="Apellido Materno:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <TextBox x:Name="txt_Materno" Width="270" PreviewTextInput="txt_Materno_PreviewTextInput"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <Label Content="Cedula de Identidad (C.I.):" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <TextBox x:Name="txt_carnet" Width="249" KeyDown="txt_carnet_KeyDown"></TextBox>
+                <Button Margin="2,0,0,0" x:Name="btn_limpiar_codigo" Width="20" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" BorderBrush="#FF989999" Click="btn_limpiar_codigo_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/food_service_admin;component/sources/x.png" Stretch="UniformToFill"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,209,0" HorizontalAlignment="Center">
+                <Label Content="Nº de Ficha:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <TextBox x:Name="txt_ficha" Width="39" KeyDown="txt_ficha_KeyDown"></TextBox>
+                <Button Margin="2,0,0,0" x:Name="btn_limpiar_codigo_ficha" Width="20" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" BorderBrush="#FF989999" Click="btn_limpiar_codigo_ficha_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/food_service_admin;component/sources/x.png" Stretch="UniformToFill"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center">
+                <Label Content="Tipo Comensal:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <ComboBox x:Name="cbTipo" Width="270">
+                    <ComboBoxItem IsSelected="True" Content="NORMAL" Tag="0"></ComboBoxItem>
+                    <ComboBoxItem  Content="EMPRESA" Tag="1"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center" Cursor="None">
+                <Label Content="Fotografia:" HorizontalContentAlignment="Right" Margin="45,0,5,0"></Label>
+                <Image Width="170" Height="170" Source="/food_service_admin;component/sources/sinFoto.png" Stretch="UniformToFill"></Image>
+                <StackPanel Orientation="Vertical">
+                    <Button Width="40" Height="40" Margin="5,0,0,5" BorderBrush="#FFEF8F00" BorderThickness="1">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/food_service_admin;component/sources/folder.png" Stretch="UniformToFill"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Width="40" Height="40" Margin="5,0,0,0" BorderBrush="#FFEF8F00" BorderThickness="1">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/food_service_admin;component/sources/noFIle.png" Stretch="UniformToFill"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Width="40" Height="40" Margin="5,5,0,0" BorderBrush="#FFEF8F00" BorderThickness="1">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/food_service_admin;component/sources/expandir.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,10,0,0">
+                <Button x:Name="btn_guardar" Width="100" Height="27" Background="#FFFFD28F" Foreground="#FF060606" Margin="0,0,10,0" BorderBrush="White" FontSize="13" Click="btn_guardar_Click">Guardar</Button>
+                <Button x:Name="btn_cerrar" Width="100" Height="27" Background="#FFFFD28F" Foreground="#FF060606" BorderBrush="White" FontSize="13" Click="btn_cerrar_Click">Cerrar</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

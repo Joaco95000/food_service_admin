@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICategoria.cs" />
+    <Compile Include="ICliente.cs" />
     <Compile Include="IDao.cs" />
+    <Compile Include="IItem.cs" />
     <Compile Include="IUsuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
