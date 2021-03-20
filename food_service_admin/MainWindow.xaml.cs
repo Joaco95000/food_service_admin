@@ -561,7 +561,6 @@ namespace food_service_admin
         }
         #endregion
 
-
         #region Excel
         public void exportarExcel(DataGrid dg, string titulo)
         {
@@ -1631,10 +1630,8 @@ namespace food_service_admin
 
         private void vntPrincipal_Closing(object sender, CancelEventArgs e)
         {
-           // AutoClosingMessageBox.Show("Cerrando el programa, espere... \nNO CIERRE ESTA VENTANA", "CERRANDO MOBIUS FOOD SERVICE...", 10000);
+            AutoClosingMessageBox.Show("Cerrando el programa, espere... \nNO CIERRE ESTA VENTANA", "CERRANDO MOBIUS FOOD SERVICE...", 10000);
             //MessageBox.Show("Cerrando el programa, espere...","Cerrando...",MessageBoxButton.OK,MessageBoxImage.Information);
         }
     }
-
-
 }
