@@ -49,7 +49,7 @@ namespace food_service_admin.ventanas
                 usuario.Cargo = null;
                 if (usuarioImpl.InsertUsuario(usuario))
                 {
-                    MessageBoxResult result = MessageBox.Show("Usuario Agregado con Exito", "Agregación de usuario", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBoxResult result = MessageBox.Show(" Usuario Agregado con Exito \n Por favor actualice la ventana con \n el boton de la parte derecha.", "Agregación de usuario", MessageBoxButton.OK, MessageBoxImage.Information);
                     if (result == MessageBoxResult.OK)
                     {
                         MainWindow obj = new MainWindow();
@@ -62,7 +62,7 @@ namespace food_service_admin.ventanas
                     MessageBox.Show("El nombre de usuario ya esta en uso, por favor cambielo o añada un número","Error",MessageBoxButton.OK,MessageBoxImage.Warning);
                 }
                
-                
+                 
             }
             else{
                 MessageBox.Show("No puede dejar campos vacios.", "Error al llenar el formulario", MessageBoxButton.OK, MessageBoxImage.Warning);

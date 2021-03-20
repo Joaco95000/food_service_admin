@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:food_service_admin.ventanas"
         mc:Ignorable="d"
-        Title="MOBIUS FOOD SERVICE LOGIN" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="MOBIUS FOOD SERVICE LOGIN" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/food_service_admin;component/sources/icono.png">
     <Grid>
         <StackPanel Orientation="Vertical">
             <DockPanel VerticalAlignment="Top" Margin="0,0,0,45">

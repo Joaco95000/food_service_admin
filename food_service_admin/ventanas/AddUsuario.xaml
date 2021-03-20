@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:food_service_admin.ventanas"
         mc:Ignorable="d"
-        Title="Mobius Food Service: Nuevo Usuario" Height="630" Width="520" BorderBrush="#FFEF8F00" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Mobius Food Service: Nuevo Usuario" Height="630" Width="520" BorderBrush="#FFEF8F00" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/food_service_admin;component/sources/icono.png">
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

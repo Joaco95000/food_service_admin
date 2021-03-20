@@ -19,9 +19,13 @@ namespace Interface
 
         DataTable ReporteAsistencia();
         DataTable ListarUsuariosComboBox();
-        DataTable BuscarAsistenciaNombre(string nombre);
+        DataTable BuscarAsistenciaNombre(string nombre, string paterno, string materno);
         DataTable BuscarAsistenciaPorFecha(string fecha_inicio, string fecha_fin);
         string CambiarEstadoAsistencia(string estadoActual, string id);
+
+        List<string> armarConsultaCantidadLonches();
+        DataTable mostrarDatosGeneral(string cantidadLonches, string totalLonches);
+        DataTable mostrarDatosGeneralPorFecha(string cantidadLonches, string totalLonches, string fecha_inicio, string fecha_fin);
 
 
     }
