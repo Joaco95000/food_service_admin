@@ -83,7 +83,7 @@
                         <Grid Grid.Row="2"  VerticalAlignment="top" HorizontalAlignment="Stretch">
                             <StackPanel Orientation="Vertical">
                                 <DockPanel Margin="0,15,0,0">
-                                    <Button x:Name="btn_exportar_excel" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16">Exportar a Excel</Button>
+                                    <Button x:Name="btn_exportar_excel" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16" Click="btn_exportar_excel_Click">Exportar a Excel</Button>
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                         <Label Content="ACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,0,0" BorderBrush="#FF545252" BorderThickness="1"/>
                                         <Label x:Name="lb_cantidad_activos" Content="11" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
@@ -179,7 +179,7 @@
                         <Grid Grid.Row="2"  VerticalAlignment="top" HorizontalAlignment="Stretch">
                             <StackPanel Orientation="Vertical">
                                 <DockPanel Margin="0,15,0,0">
-                                    <Button x:Name="btn_exportar_excel_comensal" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16">Exportar a Excel</Button>
+                                    <Button x:Name="btn_exportar_excel_comensal" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16" Click="btn_exportar_excel_comensal_Click">Exportar a Excel</Button>
                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                         <Label Content="ACTIVOS:" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,0,0" BorderBrush="#FF545252" BorderThickness="1"/>
                                         <Label x:Name="lb_cantidad_activos_comensal" Content="11" HorizontalAlignment="Right" Height="35" FontSize="16" Margin="0,0,20,0" BorderBrush="#FF545252" BorderThickness="1"/>
@@ -264,7 +264,7 @@
                         <Grid Grid.Row="2"  VerticalAlignment="top" HorizontalAlignment="Stretch">
                             <StackPanel Orientation="Vertical">
                                 <DockPanel Margin="0,15,0,0">
-                                    <Button x:Name="btn_exportar_excel_snack" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16">Exportar a Excel</Button>
+                                    <Button x:Name="btn_exportar_excel_snack" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16" Click="btn_exportar_excel_snack_Click">Exportar a Excel</Button>
                                 </DockPanel>
                                 <DockPanel>
                                     <Label x:Name="lbl_mensajes_snack" Margin="0,6,0,0" Padding="15,0,0,0" Height="25" FontSize="16" FontWeight="Bold" Background="#FFFFA51B" Foreground="White" Content=""/>

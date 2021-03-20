@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,13 +16,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Excel;
+using System.ComponentModel;
 
 namespace food_service_admin
 {
     /// <summary>
     /// Lógica de interacción para MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         UsuarioImpl usuarioImpl;
         int totalUsuario;
@@ -34,6 +38,8 @@ namespace food_service_admin
         int clientesActivos;
 
         ItemImpl itemImpl;
+        ventanas.prueba p;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -55,7 +61,7 @@ namespace food_service_admin
         private void ListarUsusarios()
         {
             usuarioImpl = new UsuarioImpl();
-            DataTable dt = usuarioImpl.listadoUsuarios();
+            System.Data.DataTable dt = usuarioImpl.listadoUsuarios();
             DataRow dr;
             totalUsuario = 0;
             usuariosInactivos = 0;
@@ -103,7 +109,7 @@ namespace food_service_admin
             txt_codigo_buscar.Text = "";
             string nombre = txt_nombre_buscar.Text;
             usuarioImpl = new UsuarioImpl();
-            DataTable dt = usuarioImpl.BuscarPorNombre(nombre);
+            System.Data.DataTable dt = usuarioImpl.BuscarPorNombre(nombre);
             if(dt!=null)
             {
                 limpiarDataGrid();
@@ -163,7 +169,7 @@ namespace food_service_admin
         {
             string codigo = txt_codigo_buscar.Text;
             usuarioImpl = new UsuarioImpl();
-            DataTable dt = usuarioImpl.BuscarPorCodigo(codigo);
+            System.Data.DataTable dt = usuarioImpl.BuscarPorCodigo(codigo);
             if (dt != null)
             {
                 limpiarDataGrid();
@@ -384,7 +390,7 @@ namespace food_service_admin
         private void ListarComensales()
         {
             clienteImpl = new ClienteImpl();
-            DataTable dt = clienteImpl.listadoClientes();
+            System.Data.DataTable dt = clienteImpl.listadoClientes();
             DataRow dr;
             totalCliente = 0;
             clientesInactivos = 0;
@@ -431,7 +437,7 @@ namespace food_service_admin
             txt_codigo_buscar_comensal.Text = "";
             string nombre = txt_nombre_buscar_comensal.Text;
             clienteImpl = new ClienteImpl();
-            DataTable dt = clienteImpl.BuscarComensalPorNombre(nombre);
+            System.Data.DataTable dt = clienteImpl.BuscarComensalPorNombre(nombre);
             if (dt != null)
             {
                 limpiarDataGridComesales();
@@ -524,7 +530,7 @@ namespace food_service_admin
         {
             string codigo = txt_codigo_buscar_comensal.Text;
             clienteImpl = new ClienteImpl();
-            DataTable dt = clienteImpl.BuscarComensalPorCodigo(codigo);
+            System.Data.DataTable dt = clienteImpl.BuscarComensalPorCodigo(codigo);
             if (dt != null)
             {
                 limpiarDataGridComesales();
@@ -576,7 +582,7 @@ namespace food_service_admin
         private void ListarProductos()
         {
             itemImpl = new ItemImpl();
-            DataTable dt = itemImpl.listadoProductos();
+            System.Data.DataTable dt = itemImpl.listadoProductos();
             DataRow dr;
 
             foreach (DataRow row in dt.Rows)
@@ -639,5 +645,110 @@ namespace food_service_admin
         }
 
         #endregion
+
+        private void btn_exportar_excel_Click(object sender, RoutedEventArgs e)
+        {
+            // exportarExcel(dg, "Reporte Usuarios"); 
+            exportarExcelPrimitivo(dg, "Reporte Usuarios");
+        }
+      
+        private void btn_exportar_excel_comensal_Click(object sender, RoutedEventArgs e)
+        {
+            //exportarExcel(dg_comensal, "Reporte Comensales");
+            exportarExcelPrimitivo(dg_comensal, "Reporte Comensales");
+        }
+
+        private void btn_exportar_excel_snack_Click(object sender, RoutedEventArgs e)
+        {
+            //exportarExcel(dg_snack, "Reporte Productos");
+            exportarExcelPrimitivo(dg_snack, "Reporte Productos");
+        }
+
+        #region Excel
+        public void exportarExcel(DataGrid dg, string titulo)
+        {
+            try
+            {
+                Excel.Application excel = new Excel.Application();
+
+                Workbook workbook = excel.Workbooks.Add(System.Reflection.Missing.Value);
+                Worksheet sheet1 = (Worksheet)workbook.Sheets[1];
+                excel.Visible = true;
+                for (int j = 0; j < dg.Columns.Count; j++)
+                {
+                    if (j != 1)
+                    {
+                        Range myRange = (Range)sheet1.Cells[1, j + 1];
+                        sheet1.Cells[1, j + 1].Font.Bold = true;
+                        sheet1.Columns[j + 1].ColumnWidth = 30;
+                        myRange.Value2 = dg.Columns[j].Header;
+                    }
+                }
+
+                for (int i = 0; i < dg.Columns.Count; i++)
+                {
+                    if (i != 1)
+                    {
+                        for (int j = 0; j < dg.Items.Count; j++)
+                        {
+                            TextBlock b = dg.Columns[i].GetCellContent(dg.Items[j]) as TextBlock;
+                            Microsoft.Office.Interop.Excel.Range myRange = (Microsoft.Office.Interop.Excel.Range)sheet1.Cells[j + 2, i + 1];
+                            if (b == null)
+                            {
+                                myRange.Value2 = "";
+                            }
+                            else
+                            {
+                                myRange.Value2 = b.Text;
+                            }                          
+                        }
+                    }
+                }
+
+                sheet1.Columns["B"].Delete();
+
+                Range line = (Range)sheet1.Rows[1];
+                line.Insert();
+
+                var range = sheet1.get_Range("A1", "F1");
+                range.Font.Size = 20;
+                range.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                range.Font.Bold = true;
+                range.Merge(true);
+
+                var fechaDoc = DateTime.Now.ToString("ddMMyyyyHHmmss");
+                var fechaTit = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+                var tituloCompletoDoc = titulo + " " + fechaDoc;
+                var tituloCompletoTit = titulo + " " + fechaTit;
+                range.Value2 = tituloCompletoTit;
+                workbook.SaveAs(tituloCompletoDoc);
+                
+                MessageBox.Show(tituloCompletoTit + " exportado con exito");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public void exportarExcelPrimitivo(DataGrid dg, string titulo)
+        {
+            dg.SelectionMode = (DataGridSelectionMode)SelectionMode.Multiple;
+            dg.SelectAllCells();
+            dg.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, dg);
+            String resultat = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
+            String result = (string)Clipboard.GetData(DataFormats.Text);
+            dg.UnselectAllCells();
+            System.IO.StreamWriter file1 = new System.IO.StreamWriter(@"D:\"+titulo+" "+ DateTime.Now.ToString("ddMMyyyyHHmmss")+".xls");
+            file1.WriteLine(result);
+            file1.Close();
+            dg.SelectionMode = (DataGridSelectionMode)SelectionMode.Single;
+            MessageBox.Show("Reporte Generado con exito");
+        }
+
+        #endregion
+
     }
 }
