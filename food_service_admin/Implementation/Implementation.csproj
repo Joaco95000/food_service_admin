@@ -42,7 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CategoriaImpl.cs" />
+    <Compile Include="ClienteImpl.cs" />
     <Compile Include="DBImplementation.cs" />
+    <Compile Include="ItemImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReporteImpl.cs" />
     <Compile Include="UsuarioImpl.cs" />
