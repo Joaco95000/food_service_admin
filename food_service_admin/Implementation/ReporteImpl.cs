@@ -22,7 +22,6 @@ namespace Implementation
 	                        ON S.cliente = C.id
 	                        INNER JOIN item AS I
 	                        ON S.item = I.id
-	                        WHERE I.nombre NOT LIKE '%lonche'
                             ORDER BY S.fecha desc";
             SqlCommand cmd;
             try
@@ -48,7 +47,7 @@ namespace Implementation
 	                        ON S.cliente = C.id
 	                        INNER JOIN item AS I
 	                        ON S.item = I.id
-	                        WHERE I.nombre NOT LIKE '%lonche' AND S.orden = @ORDEN";
+	                        WHERE S.orden = @ORDEN";
             SqlCommand cmd;
             try
             {
@@ -105,7 +104,7 @@ namespace Implementation
 	                        ON S.cliente = C.id
 	                        INNER JOIN item AS I
 	                        ON S.item = I.id
-	                        WHERE I.nombre NOT LIKE '%lonche' AND S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal
+	                        WHERE S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal
                             ORDER BY S.fecha asc";
             SqlCommand cmd;
             try
