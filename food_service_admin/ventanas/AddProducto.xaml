@@ -1,0 +1,86 @@
+﻿<Window x:Class="food_service_admin.ventanas.AddProducto"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:food_service_admin.ventanas"
+        mc:Ignorable="d"
+        Title="Mobius Food Service: Nuevo Producto" Height="530" Width="520" BorderBrush="#FFEF8F00" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Agregar Nuevo Producto" Foreground="#FFEF8F00" FontWeight="Bold" FontSize="16"></Label>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
+                <Label Content="Nombre Producto:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <TextBox x:Name="txt_Nombre_Producto" Width="270"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <Label Content="Categoria:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <ComboBox x:Name="cb_Categoria" Width="270"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <Label Content="Descripción:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <TextBox x:Name="txt_Descripcion" Width="270" Height="70" TextWrapping="Wrap" AcceptsReturn="True"></TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <Label Content="Precio:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <Border BorderThickness="1" BorderBrush="#ABADB3" Margin="0,0,155,0">
+                    <TextBlock Width="112" >
+                        <Label Content="$b" Padding="7,5,0,5"></Label>
+                        <TextBox TextAlignment="Right" BorderThickness="0" Margin="2,5,0,5" VerticalAlignment="Center" x:Name="txtPrecio" IsEnabled="False" Text="0.10" Width="39"></TextBox>
+                        <StackPanel>
+                            <Button Width="20" Height="10" VerticalAlignment="Top" Content="▲"  FontSize="4" Name="btnAmentarPrecio"  Margin="0,0,0,6" Click="btnAmentarPrecio_Click"></Button>
+                            <Button Width="20" Height="10" VerticalAlignment="Bottom" Content="▼" FontSize="4" Name="btnReducirPrecio" Click="btnReducirPrecio_Click"></Button>
+                        </StackPanel>
+                        <StackPanel>
+                            <Button Width="20" Height="10" VerticalAlignment="Top" Content="▲"  FontSize="4" Name="btnAmentarPreciox10"  Margin="0,0,0,6" Click="btnAmentarPreciox10_Click"></Button>
+                            <Button Width="20" Height="10" VerticalAlignment="Bottom" Content="▼" FontSize="4" Name="btnReducirPreciox10" Click="btnReducirPreciox10_Click"></Button>
+                        </StackPanel>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <Label Content="Stock:" Width="170" HorizontalContentAlignment="Right" Margin="0,0,5,0"></Label>
+                <Border BorderThickness="1" BorderBrush="#ABADB3" Margin="0,0,177,0">
+                    <TextBlock Width="89" >
+                        <CheckBox VerticalAlignment="Center" Margin="5,5" Name="cbHabilitarStock" IsEnabled="True" Checked="cbHabilitarStock_Checked" Unchecked="cbHabilitarStock_Unchecked"></CheckBox>
+                        <!-- <Label Content="$b" Padding="5,5,0,5"></Label> -->
+                        <TextBox TextAlignment="Right" BorderThickness="0" Margin="2,5,0,5" VerticalAlignment="Center" x:Name="txtCantidadStock" IsEnabled="False" Text="0" Width="34"></TextBox>
+                        <StackPanel>
+                            <Button Width="20" Height="10" VerticalAlignment="Top" Margin="0,0,0,6" Content="▲"  FontSize="4" Name="btnAmentarStock" IsEnabled="False" Click="btnAmentarStock_Click"></Button>
+                            <Button Width="20" Height="10" VerticalAlignment="Bottom" Content="▼" FontSize="4" Name="btnReducirStock" IsEnabled="False" Click="btnReducirStock_Click"></Button>
+                        </StackPanel>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center" Cursor="None">
+                <Label Content="Imagen:" HorizontalContentAlignment="Right" Margin="45,0,5,0"></Label>
+                <Image Width="170" Height="170" Source="/food_service_admin;component/sources/sinFoto.png" Stretch="UniformToFill"></Image>
+                <StackPanel Orientation="Vertical">
+                    <Button Width="40" Height="40" Margin="5,0,0,5" BorderBrush="#FFEF8F00" BorderThickness="1">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/food_service_admin;component/sources/folder.png" Stretch="UniformToFill"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Width="40" Height="40" Margin="5,0,0,0" BorderBrush="#FFEF8F00" BorderThickness="1">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/food_service_admin;component/sources/noFIle.png" Stretch="UniformToFill"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Width="40" Height="40" Margin="5,5,0,0" BorderBrush="#FFEF8F00" BorderThickness="1">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/food_service_admin;component/sources/expandir.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,10,0,0">
+                <Button x:Name="btn_guardar" Width="100" Height="27" Background="#FFFFD28F" Foreground="#FF060606" Margin="0,0,10,0" BorderBrush="White" FontSize="13" Click="btn_guardar_Click" >Guardar</Button>
+                <Button x:Name="btn_cerrar" Width="100" Height="27" Background="#FFFFD28F" Foreground="#FF060606" BorderBrush="White" FontSize="13" Click="btn_cerrar_Click" >Cerrar</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -7,6 +7,7 @@ using Model;
 using Interface;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows;
 
 namespace Implementation
 {
@@ -173,15 +174,12 @@ namespace Implementation
                     usuario.Documento = dt.Rows[0][5].ToString();
                     usuario.Login = dt.Rows[0][6].ToString();
 
-                    return usuario;
                 }
-
-                return null;
-                
-
+                return usuario;
             }
             catch (Exception ex)
             {
+                MessageBox.Show("Login: " + ex);
                 throw ex;
             }
         }

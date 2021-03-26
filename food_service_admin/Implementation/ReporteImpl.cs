@@ -74,7 +74,7 @@ namespace Implementation
             if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
             if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
 
-            string query = @"UPDATE snack SET estado=@ESTADO WHERE id=@ID";
+            string query = @"UPDATE snack SET estado=@ESTADO WHERE orden=@ID";
             SqlCommand cmd;
             try
             {
@@ -100,7 +100,8 @@ namespace Implementation
 	                        ON S.cliente = C.id
 	                        INNER JOIN item AS I
 	                        ON S.item = I.id
-	                        WHERE I.nombre NOT LIKE '%lonche' AND S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal";
+	                        WHERE I.nombre NOT LIKE '%lonche' AND S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal
+                            ORDER BY S.fecha asc";
             SqlCommand cmd;
             try
             {
@@ -255,7 +256,7 @@ namespace Implementation
             var res2 = "";
             string query = @"SELECT id, nombre 
                             FROM item
-                            WHERE nombre LIKE '%LONCHE';";
+                            WHERE nombre LIKE '%LONCHE%';";
             try
             {
                 SqlCommand cmd = DBImplementation.CreateBasicCommand(query);
@@ -347,6 +348,112 @@ namespace Implementation
 
         #endregion
 
+        #region Comedor
+        public DataTable ReporteComedor()
+        {
+            string query = @"SELECT TOP (2000) '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
+                            FROM registro AS  R
+                            INNER JOIN cliente C
+                            ON R.cliente = C.id
+                            WHERE R.turno = 'ALMUERZO' OR R.turno = 'CENA'
+                            ORDER BY r.id desc";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public DataTable BuscarPorTicket(string ticket)
+        {
+            DataTable dt = new DataTable();
+            string query = @"SELECT '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
+                            FROM registro AS  R
+                            INNER JOIN cliente C
+                            ON R.cliente = C.id
+                            WHERE (R.turno = 'ALMUERZO' OR R.turno = 'CENA') AND R.id = @ticket
+                            ORDER BY r.id desc";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+                cmd.Parameters.AddWithValue("@ticket", ticket);
+                dt = DBImplementation.ExecuteDataTableCommand(cmd);
+                if (dt.Rows.Count > 0)
+                {
+                    return dt;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public DataTable BuscarPorFechaComedor(string fechaInicioComedor, string fechaFinComedor)
+        {
+            DataTable dt = new DataTable();
+            string query = @"SELECT TOP (2000) '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
+                            FROM registro AS  R
+                            INNER JOIN cliente C
+                            ON R.cliente = C.id
+                            WHERE (R.turno = 'ALMUERZO' OR R.turno = 'CENA') AND R.fecha >= @fechaInicio AND R.fecha <= @fechaFinal
+                            ORDER BY r.id desc";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+                cmd.Parameters.AddWithValue("@fechaInicio", fechaInicioComedor);
+                cmd.Parameters.AddWithValue("@fechaFinal", fechaFinComedor);
+                dt = DBImplementation.ExecuteDataTableCommand(cmd);
+                if (dt.Rows.Count > 0)
+                {
+                    return dt;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public string CambiarEstadoComedor(string estadoActual, string id)
+        {
+            string estado = "";
+            if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
+            if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
+
+            string query = @"UPDATE registro SET estado=@ESTADO WHERE id=@ID";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+                cmd.Parameters.AddWithValue("@ESTADO", estado);
+                cmd.Parameters.AddWithValue("@ID", id);
+                DBImplementation.ExecuteDataTableCommand(cmd);
+                return "Cambio de estado de " + estadoActual + " a " + estado + " realizado con exito";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        #endregion
+
 
         #region DefaultFunctions
         public int Delete(Reporte t)
@@ -369,8 +476,6 @@ namespace Implementation
         {
             throw new NotImplementedException();
         }
-
-        
 
 
 

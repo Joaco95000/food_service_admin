@@ -27,6 +27,11 @@ namespace Interface
         DataTable mostrarDatosGeneral(string cantidadLonches, string totalLonches);
         DataTable mostrarDatosGeneralPorFecha(string cantidadLonches, string totalLonches, string fecha_inicio, string fecha_fin);
 
+        DataTable ReporteComedor();
+        DataTable BuscarPorTicket(string ticket);
+        DataTable BuscarPorFechaComedor(string fechaInicioComedor, string fechaFinComedor);
+        string CambiarEstadoComedor(string estadoActual, string id);
+
 
     }
 }

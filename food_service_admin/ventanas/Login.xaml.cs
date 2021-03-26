@@ -32,23 +32,31 @@ namespace food_service_admin.ventanas
 
         private void btn_ingresar_Click(object sender, RoutedEventArgs e)
         {
-            string user = txt_usuario.Text;
-            string password = psb_password.Password;
-            password = Encrypt.GetMD5(password);
-            var userSelected = usuarioImpl.Login(user, password);
-            if(userSelected != null)
+            try
             {
-                sesion = userSelected;
-                MainWindow principal = new MainWindow();
-                principal.Show();
-                this.Close();
+                string user = txt_usuario.Text;
+                string password = psb_password.Password;
+                password = Encrypt.GetMD5(password);
+                var userSelected = usuarioImpl.Login(user, password);
+                if (userSelected != null)
+                {
+                    sesion = userSelected;
+                    MainWindow principal = new MainWindow();
+                    principal.Show();
+                    this.Close();
+                }
+                else
+                {
+                    txt_usuario.Text = "";
+                    psb_password.Password = "";
+                    lbl_mensaje.Content = "Usuario y/o contraseña incorrecta.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                txt_usuario.Text = "";
-                psb_password.Password = "";
-                lbl_mensaje.Content = "Usuario y/o contraseña incorrecta.";
+                MessageBox.Show("Login: " + ex);
             }
+            
 
         }
     }
