@@ -40,6 +40,7 @@ namespace Implementation
 
         public DataTable BuscarPorOrden(string orden)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar una orden en Ventas con codigo: {2} ", DateTime.Now, Sesion.verInfo(), orden));
             DataTable dt = new DataTable();
             string query = @"SELECT TOP(2000) '' AS Num,(CAST(S.fecha AS nvarchar(50))+' '+CAST(s.hora AS NVARCHAR(8))) as Fecha, C.nombre+' '+C.paterno+' '+C.materno AS Cliente, C.codigo AS Codigo, I.nombre AS Item, S.cantidad AS cantidad, S.precio as Precio,S.total AS Total, S.orden AS Orden, S.tipo AS Tipo, S.estado AS Estado, '' AS Cambio, S.id
 	                        FROM snack S
@@ -56,6 +57,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se busco una orden en Ventas con codigo: {2} ", DateTime.Now, Sesion.verInfo(), orden));
                     return dt;
                 }
 
@@ -63,13 +65,14 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Ventas Buscar por orden {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public string CambiarEstadoVentas(string estadoActual, string id)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para Ventas", DateTime.Now, Sesion.verInfo()));
             string estado = "";
             if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
             if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
@@ -82,17 +85,19 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@ESTADO", estado);
                 cmd.Parameters.AddWithValue("@ID", id);
                 DBImplementation.ExecuteDataTableCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Cambio de estado en Ventas a {2} realizado con exito", DateTime.Now, Sesion.verInfo(), id));
                 return "Cambio de estado de " + estadoActual + " a " + estado + " realizado con exito";
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Ventas ChangeStatus {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public DataTable BuscarPorFecha(string fecha_inicio, string fecha_fin)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte de ventas del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio,fecha_fin));
             DataTable dt = new DataTable();
             string query = @"SELECT TOP(2000) '' AS Num,(CAST(S.fecha AS nvarchar(50))+' '+CAST(s.hora AS NVARCHAR(8))) as Fecha, C.nombre+' '+C.paterno+' '+C.materno AS Cliente, C.codigo AS Codigo, I.nombre AS Item, S.cantidad AS cantidad, S.precio as Precio,S.total AS Total, S.orden AS Orden, S.tipo AS Tipo, S.estado AS Estado, '' AS Cambio, S.id
 	                        FROM snack S
@@ -111,6 +116,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se saco un reporte de ventas del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
                     return dt;
                 }
 
@@ -118,7 +124,7 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Ventas Buscar por Fecha {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
@@ -168,6 +174,7 @@ namespace Implementation
         }
         public DataTable BuscarAsistenciaNombre(string nombre, string paterno, string materno)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar la asistencia de un usuario con nombre: {2} ", DateTime.Now, Sesion.verInfo(), nombre));
             DataTable dt = new DataTable();
             string query = @"SELECT TOP (1000) '' AS Num, ISNULL(U.nombre,'')+' '+ISNULL(U.paterno,'')+' '+ISNULL(U.materno,'') AS 'Nombre Completo', CAST(A.fecha_ingreso AS nvarchar(50)) AS Ingreso, CAST(DATEPART(WEEKDAY,A.fecha_ingreso) AS nvarchar(15)) AS Dia, ISNULL(CAST(A.fecha_salida AS nvarchar(50)),'--') AS Salida, ISNULL((CAST((DATEDIFF(HOUR,A.hora_ingreso,A.hora_salida)-1) as nvarchar(20)) )+':'+(CAST((DATEDIFF(minute,A.hora_ingreso,A.hora_salida)%60) AS nvarchar(20))),'0:0') AS tiempo, A.estado, A.id AS Id, '' AS cambio
                             FROM asistencia A
@@ -184,6 +191,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se busco la asistencia de un usuario con nombre: {2} ", DateTime.Now, Sesion.verInfo(), nombre));
                     return dt;
                 }
 
@@ -191,13 +199,14 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Asistencia Buscar por nombre {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public string CambiarEstadoAsistencia(string estadoActual, string id)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para la Asistencia de un Usuario", DateTime.Now, Sesion.verInfo()));
             string estado = "";
             if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
             if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
@@ -210,16 +219,18 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@ESTADO", estado);
                 cmd.Parameters.AddWithValue("@ID", id);
                 DBImplementation.ExecuteDataTableCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Cambio de estado de Asistencia a {2} realizado con exito", DateTime.Now, Sesion.verInfo(), id));
                 return "Cambio de estado de " + estadoActual + " a " + estado + " realizado con exito";
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Asistencia ChangeStatus {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
         public DataTable BuscarAsistenciaPorFecha(string fecha_inicio, string fecha_fin)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte de Asistencia del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
             DataTable dt = new DataTable();
             string query = @"SELECT TOP (1000) '' AS Num, ISNULL(U.nombre,'')+' '+ISNULL(U.paterno,'')+' '+ISNULL(U.materno,'') AS 'Nombre Completo', CAST(A.fecha_ingreso AS nvarchar(50)) AS Ingreso, CAST(DATEPART(WEEKDAY,A.fecha_ingreso) AS nvarchar(15)) AS Dia, ISNULL(CAST(A.fecha_salida AS nvarchar(50)),'--') AS Salida, ISNULL((CAST((DATEDIFF(HOUR,A.hora_ingreso,A.hora_salida)-1) as nvarchar(20)) )+':'+(CAST((DATEDIFF(minute,A.hora_ingreso,A.hora_salida)%60) AS nvarchar(20))),'0:0') AS tiempo, A.estado, A.id AS Id, '' AS cambio
                             FROM asistencia A
@@ -235,6 +246,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se saco un reporte de Asistencia del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
                     return dt;
                 }
 
@@ -242,7 +254,7 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Asistencia Buscar por Fecha {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
@@ -312,6 +324,7 @@ namespace Implementation
 
         public DataTable mostrarDatosGeneralPorFecha(string cantidadLonches, string totalLonches, string fecha_inicio, string fecha_fin)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte General del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
             DataTable dt = new DataTable();
             string query = @"SELECT '' AS '№' ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
@@ -335,6 +348,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se saco un reporte General del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
                     return dt;
                 }
 
@@ -342,6 +356,7 @@ namespace Implementation
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: General Buscar por Fecha {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
@@ -373,6 +388,7 @@ namespace Implementation
 
         public DataTable BuscarPorTicket(string ticket)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar en Comedor el ticket: {2} ", DateTime.Now, Sesion.verInfo(), ticket));
             DataTable dt = new DataTable();
             string query = @"SELECT '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
                             FROM registro AS  R
@@ -388,6 +404,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se busco en Comedor el ticket: {2} ", DateTime.Now, Sesion.verInfo(), ticket));
                     return dt;
                 }
 
@@ -395,13 +412,14 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Comedor Buscar por Ticket {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public DataTable BuscarPorFechaComedor(string fechaInicioComedor, string fechaFinComedor)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte de Comedor del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fechaInicioComedor, fechaFinComedor));
             DataTable dt = new DataTable();
             string query = @"SELECT TOP (2000) '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
                             FROM registro AS  R
@@ -418,6 +436,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se saco un reporte de Comedor del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fechaInicioComedor, fechaFinComedor));
                     return dt;
                 }
 
@@ -425,12 +444,13 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Comedor Buscar por Fecha {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
         public string CambiarEstadoComedor(string estadoActual, string id)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para Comedor", DateTime.Now, Sesion.verInfo()));
             string estado = "";
             if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
             if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
@@ -443,17 +463,18 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@ESTADO", estado);
                 cmd.Parameters.AddWithValue("@ID", id);
                 DBImplementation.ExecuteDataTableCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Cambio de estado al ticket {2} en Comedor realizado con exito", DateTime.Now, Sesion.verInfo(), id));
                 return "Cambio de estado de " + estadoActual + " a " + estado + " realizado con exito";
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Comedor ChangeStatus {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
 
         #endregion
-
 
         #region DefaultFunctions
         public int Delete(Reporte t)

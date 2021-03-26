@@ -52,6 +52,7 @@ namespace Implementation
 
         public string CambiarEstadoComesal(string estadoActual, string codigo)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para Comensal", DateTime.Now, Sesion.verInfo()));
             string estado = "";
             if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
             if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
@@ -64,17 +65,19 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@estado", estado);
                 cmd.Parameters.AddWithValue("@codigo", codigo);
                 DBImplementation.ExecuteDataTableCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Cambio de estado a {2} realizado con exito", DateTime.Now, Sesion.verInfo(), codigo));
                 return "Cambio de estado de " + estadoActual + " a " + estado + " realizado con exito";
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: ChangeEstatus Comensales {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public DataTable BuscarComensalPorCodigo(string codigo)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar al comensal con codigo: {2} ", DateTime.Now, Sesion.verInfo(), codigo));
             DataTable dt = new DataTable();
             string query = @"SELECT codigo As Ficha, nombre AS Nombres, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, (CASE WHEN tipo = 0 THEN'NORMAL' ELSE 'EMPRESA' END)  AS Tipo, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Imagen, estado AS Estado,'' AS Cambiar 
                             FROM cliente
@@ -87,6 +90,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se busco al comensal con codigo: {2} ", DateTime.Now, Sesion.verInfo(), codigo));
                     return dt;
                 }
 
@@ -94,13 +98,14 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Comensales Buscar por codigo {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public DataTable BuscarComensalPorNombre(string nombre)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar al comensal con nombre: {2} ", DateTime.Now, Sesion.verInfo(), nombre));
             DataTable dt = new DataTable();
             string query = @"SELECT codigo As Ficha, nombre AS Nombres, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, (CASE WHEN tipo = 0 THEN'NORMAL' ELSE 'EMPRESA' END)  AS Tipo, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Imagen, estado AS Estado,'' AS Cambiar 
                             FROM cliente
@@ -115,19 +120,20 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se busco al comensal con nombre: {2} ", DateTime.Now, Sesion.verInfo(), nombre));
                     return dt;
                 }
-
                 return null;
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Comensales Buscar por nombre {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
         public bool InsertCliente(Cliente c)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo Insert para Comensales", DateTime.Now, Sesion.verInfo()));
             string query = @"INSERT INTO cliente(nombre, paterno, materno, documento, fecha_ingreso, codigo, tipo, estado)
 			                VALUES(@nombre, @paterno, @materno, @documento, @fecha_ingreso, @codigo, @tipo, @estado);";
             try
@@ -144,16 +150,19 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@estado", "ACTIVO");
 
                 DBImplementation.ExecuteBasicCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Registro de Comensal insertado con exito: {2}", DateTime.Now, Sesion.verInfo(), c.Codigo));
                 return true;
             }
             catch (Exception ex)
             {
                 //throw ex;
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Comensales Insert {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 return false;
             };
         }
         public bool BuscarCodigo(string codigo)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: 2da Intentando buscar al comensal con codigo: {2} ", DateTime.Now, Sesion.verInfo(), codigo));
             string query = @"SELECT id
                             FROM cliente 
                             WHERE codigo = @codigo";
@@ -171,6 +180,7 @@ namespace Implementation
             catch (Exception ex)
             {
                 //throw ex;
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: 2da Comensales Buscar por codigo {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 return true;
             };
         }

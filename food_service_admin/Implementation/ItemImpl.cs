@@ -34,6 +34,7 @@ namespace Implementation
 
         public string CambiarEstadoSnack(string estadoActual, string id)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para Item", DateTime.Now, Sesion.verInfo()));
             string estado = "";
             if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
             if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
@@ -46,17 +47,19 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@estado", estado);
                 cmd.Parameters.AddWithValue("@id", id);
                 DBImplementation.ExecuteDataTableCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Cambio de estado a {2} realizado con exito", DateTime.Now, Sesion.verInfo(), id));
                 return "Cambio de estado de " + estadoActual + " a " + estado + " realizado con exito";
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Item ChangeStatus {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public bool InsertProducto(Item i)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo Insert para Producto", DateTime.Now, Sesion.verInfo()));
             string query = @"INSERT INTO item(nombre, descripcion, precio, categoria, stock, estado)
 			                VALUES(@nombre, @descripcion, @precio, @categoria, @stock, @estado);";
             try
@@ -71,11 +74,13 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@estado", "ACTIVO");
 
                 DBImplementation.ExecuteBasicCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Registro de Producto insertado con exito: {2}", DateTime.Now, Sesion.verInfo(), i.Nombre));
                 return true;
             }
             catch (Exception ex)
             {
                 //throw ex;
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Productos Insert {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 return false;
             };
         }

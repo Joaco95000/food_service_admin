@@ -13,7 +13,7 @@ namespace Interface
     {
         DataTable listadoUsuarios();
 
-        Usuario Login(string user, string password);
+        DataTable Login(string user, string password);
 
         DataTable BuscarPorNombre(string nombre);
         DataTable BuscarPorCodigo(string codigo);

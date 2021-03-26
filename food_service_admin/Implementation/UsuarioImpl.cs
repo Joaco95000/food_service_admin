@@ -15,8 +15,9 @@ namespace Implementation
     {
         public DataTable BuscarPorCodigo(string codigo)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar al usuario con codigo: {2} ", DateTime.Now, Sesion.verInfo(), codigo));
             DataTable dt = new DataTable();
-            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado, '' AS Cambiar FROM usuario WHERE id like @codigo+'_%'";
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado, '' AS Cambiar FROM usuario WHERE id like @codigo+'_%' OR id=@codigo";
             SqlCommand cmd;
             try
             {
@@ -25,6 +26,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se busco al usuario con codigo: {2} ", DateTime.Now, Sesion.verInfo(), codigo));
                     return dt;
                 }
 
@@ -32,13 +34,14 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Usuarios Buscar por codigo {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public DataTable BuscarPorNombre(string nombre)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar al usuario con nombre: {2} ", DateTime.Now, Sesion.verInfo(), nombre));
             DataTable dt = new DataTable();
             string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado,'' AS Cambiar FROM usuario WHERE nombre like @nombre+'%' OR paterno like @paterno+'%' OR materno like @materno+'%'";
             SqlCommand cmd;
@@ -51,6 +54,7 @@ namespace Implementation
                 dt = DBImplementation.ExecuteDataTableCommand(cmd);
                 if (dt.Rows.Count > 0)
                 {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se busco al usuario con nombre: {2} ", DateTime.Now, Sesion.verInfo(), nombre));
                     return dt;
                 }
 
@@ -58,13 +62,14 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Usuarios Buscar por nombre {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
 
         public string CambiarEstado(string estadoActual, string id)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para Usuario", DateTime.Now, Sesion.verInfo()));
             string estado="";
             if (estadoActual == "ACTIVO") { estado = "INACTIVO"; }
             if (estadoActual == "INACTIVO") { estado = "ACTIVO"; }
@@ -77,14 +82,15 @@ namespace Implementation
                 cmd.Parameters.AddWithValue("@ESTADO", estado);
                 cmd.Parameters.AddWithValue("@ID", id);
                 DBImplementation.ExecuteDataTableCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Cambio de estado a {2} realizado con exito", DateTime.Now, Sesion.verInfo(), id));
                 return "Cambio de estado de "+estadoActual+" a "+estado+" realizado con exito";
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Usuarios ChangeStatus {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
-            //
+            
         }
 
         public int Delete(Usuario t)
@@ -99,6 +105,7 @@ namespace Implementation
 
         public bool InsertUsuario(Usuario t)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo Insert para Usuario", DateTime.Now,Sesion.verInfo()));
             string query = @"INSERT INTO usuario(nombre,paterno,materno,login,password,documento,estado)
 				                           VALUES(@nombre,@paterno,@materno,@login,@password,@documento,@estado)";
             try
@@ -121,11 +128,13 @@ namespace Implementation
                 //cmd.Parameters.AddWithValue("@fecha_nacimiento", null);
                 //cmd.Parameters.AddWithValue("@cargo", t.Cargo);
                 DBImplementation.ExecuteBasicCommand(cmd);
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Registro de Usuario insertado con exito: {2}", DateTime.Now, Sesion.verInfo(),t.Login));
                 return true;
             }
             catch (Exception ex)
             {
                 //throw ex;
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: Usuarios Insert {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 return false;
             };
         }
@@ -142,18 +151,18 @@ namespace Implementation
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Error: ListarUsuarios {1}", DateTime.Now, ex.Message));
                 throw ex;
             }
         }
 
-        public Usuario Login(string user, string password)
+        public DataTable Login(string user, string password)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Intendando ingresar al sistema", DateTime.Now));
             DataTable dt = new DataTable();
-            Usuario usuario = null;
-            string query = @"SELECT nombre, paterno, materno, estado, id, documento, login
+            string query = @"SELECT id, nombre, paterno, materno, login
                               FROM usuario
-                              WHERE login=@login AND password=@password";
+                              WHERE login=@login AND password=@password AND estado='ACTIVO'";
             SqlCommand cmd;
             try
             {
@@ -165,20 +174,15 @@ namespace Implementation
 
                 if (dt.Rows.Count > 0)
                 {
-                    usuario = new Usuario();
-                    usuario.Nombre = dt.Rows[0][0].ToString();
-                    usuario.Paterno = dt.Rows[0][1].ToString();
-                    usuario.Materno = dt.Rows[0][2].ToString();
-                    usuario.Estado = dt.Rows[0][3].ToString().Trim();
-                    usuario.Id = int.Parse(dt.Rows[0][4].ToString());
-                    usuario.Documento = dt.Rows[0][5].ToString();
-                    usuario.Login = dt.Rows[0][6].ToString();
-
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Ingreso al sistema exitoso", DateTime.Now));
+                    return dt;
                 }
-                return usuario;
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Ingreso al sistema fallido - {1}", DateTime.Now,user));
+                return null;
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Error: Login {1}", DateTime.Now, ex.Message));
                 MessageBox.Show("Login: " + ex);
                 throw ex;
             }

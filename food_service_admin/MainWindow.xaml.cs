@@ -44,7 +44,7 @@ namespace food_service_admin
         public MainWindow()
         {
             InitializeComponent();
-           /// this.Title += " [" + ventanas.Login.sesion.Login + " - " + ventanas.Login.sesion.Nombre + " " + ventanas.Login.sesion.Paterno + " " + ventanas.Login.sesion.Materno + "]";
+            this.Title += " [" + Sesion.login + " - " + Sesion.nombre + " " + Sesion.paterno + " " + Sesion.materno + "]";
             ListarUsusarios();
             lbl_mensajes.Content = "Login con exito, se cargaron los datos correctamente";
             lbl_mensajes.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80));
@@ -599,6 +599,7 @@ namespace food_service_admin
         }
 
         #endregion
+
 
         #region botones SAcar reporte
         private void btn_exportar_excel_Click(object sender, RoutedEventArgs e)
@@ -1487,6 +1488,230 @@ namespace food_service_admin
 
         #endregion
 
+        #region codigo Comedor
+        private void ListarReporteComedor()
+        {
+            reporteImpl = new ReporteImpl();
+            System.Data.DataTable dt2 = reporteImpl.ReporteComedor();
+            DataRow dr2;
+            contadorFilasComedor = 1;
+            limpiarDataGridReportes("comedor");
+            foreach (DataRow row2 in dt2.Rows)
+            {
+                dr2 = dt2.NewRow();
+                for (int i = 0; i < row2.ItemArray.Length; i++)
+                {
+                    dr2[0] = contadorFilasComedor;
+                    dr2[i] = row2.ItemArray[i].ToString();
+                    //MessageBox.Show(row2.ItemArray[i].ToString());
+                    if (row2.ItemArray[8].ToString() == "ACTIVO")
+                    {
+                        //MessageBox.Show(row.ItemArray[5].ToString());
+                        dr2[9] = "sources/check.png";
+                    }
+                    if (row2.ItemArray[8].ToString() == "INACTIVO")
+                    {
+                        dr2[9] = "sources/equis.png";
+                    }
+
+                }
+                this.Dispatcher.Invoke(() =>
+                {
+                    dgComedor.Items.Add(dr2);
+                });
+
+                contadorFilasComedor += 1;
+            }
+
+        }
+        private void ListarReportesComedorTicket(string ticket)
+        {
+            reporteImpl = new ReporteImpl();
+            System.Data.DataTable dt2 = reporteImpl.BuscarPorTicket(ticket);
+            DataRow dr2;
+            contadorFilasComedor = 1;
+            limpiarDataGridReportes("comedor");
+            if (dt2 != null)
+            {
+                foreach (DataRow row2 in dt2.Rows)
+                {
+                    dr2 = dt2.NewRow();
+                    for (int i = 0; i < row2.ItemArray.Length; i++)
+                    {
+                        dr2[0] = contadorFilasComedor;
+                        dr2[i] = row2.ItemArray[i].ToString();
+                        //MessageBox.Show(row2.ItemArray[i].ToString());
+                        if (row2.ItemArray[8].ToString() == "ACTIVO")
+                        {
+                            //MessageBox.Show(row.ItemArray[5].ToString());
+                            dr2[9] = "sources/check.png";
+                        }
+                        if (row2.ItemArray[8].ToString() == "INACTIVO")
+                        {
+                            dr2[9] = "sources/equis.png";
+                        }
+
+                    }
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        dgComedor.Items.Add(dr2);
+                    });
+
+                    contadorFilasComedor += 1;
+                }
+                this.Dispatcher.Invoke(() =>
+                {
+                    lbl_mensajes_comedor.Content = "Tickets encotrados";
+                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80));
+                });
+            }
+            else
+            {
+                limpiarDataGridReportes("comedor");
+                this.Dispatcher.Invoke(() =>
+                {
+                    lbl_mensajes_comedor.Content = "Ticket no encontrado";
+                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(244, 67, 54));
+                });
+
+
+            }
+        }
+        private void ListarReportesComedorFecha(string fechaInicioComedor, string fechaFinComedor)
+        {
+            reporteImpl = new ReporteImpl();
+            System.Data.DataTable dt2 = reporteImpl.BuscarPorFechaComedor(fechaInicioComedor, fechaFinComedor);
+            DataRow dr2;
+            contadorFilasComedor = 1;
+            limpiarDataGridReportes("comedor");
+            if (dt2 != null)
+            {
+                foreach (DataRow row2 in dt2.Rows)
+                {
+                    dr2 = dt2.NewRow();
+                    for (int i = 0; i < row2.ItemArray.Length; i++)
+                    {
+                        dr2[0] = contadorFilasComedor;
+                        dr2[i] = row2.ItemArray[i].ToString();
+                        //MessageBox.Show(row2.ItemArray[i].ToString());
+                        if (row2.ItemArray[8].ToString() == "ACTIVO")
+                        {
+                            //MessageBox.Show(row.ItemArray[5].ToString());
+                            dr2[9] = "sources/check.png";
+                        }
+                        if (row2.ItemArray[8].ToString() == "INACTIVO")
+                        {
+                            dr2[9] = "sources/equis.png";
+                        }
+
+                    }
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        dgComedor.Items.Add(dr2);
+                    });
+
+                    contadorFilasComedor += 1;
+                }
+                this.Dispatcher.Invoke(() =>
+                {
+                    lbl_mensajes_comedor.Content = "Tickets encotrados en esta fecha";
+                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80));
+                });
+            }
+            else
+            {
+                limpiarDataGridReportes("comedor");
+                this.Dispatcher.Invoke(() =>
+                {
+                    lbl_mensajes_comedor.Content = "Ticket no encontrados en estas fechas";
+                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(244, 67, 54));
+                });
+
+
+            }
+        }
+
+        private void btn_refrescar_comedor_Loaded(object sender, RoutedEventArgs e)
+        {
+            BusyIndicadorComedor.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => ListarReporteComedor();
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
+            worker.RunWorkerAsync();
+            lbl_mensajes_comedor.Content = "Datos Cargados";
+        }
+
+        private void btn_refrescar_comedor_Click(object sender, RoutedEventArgs e)
+        {
+            limpiarDataGridReportes("comedor");
+            BusyIndicadorComedor.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => ListarReporteComedor();
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
+            worker.RunWorkerAsync();
+            lbl_mensajes_comedor.Content = "Datos Actualizados";
+        }
+
+        private void txt_ticket_buscar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key >= Key.D0 && e.Key <= Key.D9 || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+                e.Handled = false;
+            else
+                e.Handled = true;
+        }
+
+        private void btn_buscar_ticket_Click(object sender, RoutedEventArgs e)
+        {
+            string ticket = txt_ticket_buscar.Text;
+            BusyIndicadorComedor.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => ListarReportesComedorTicket(ticket);
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
+            worker.RunWorkerAsync();
+            lbl_mensajes1.Content = "Datos Cargados";
+        }
+
+        private void dp_fecha_fin_comedor_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dp_fecha_inicio_comedor.SelectedDate.ToString() == "")
+            {
+                MessageBox.Show("Seleccione una fecha de inicio primero", "Atención", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                string fechaInicioComedor = "";
+                string fechaFinComedor = "";
+                this.Dispatcher.Invoke(() =>
+                {
+                    fechaInicioComedor = dp_fecha_inicio_comedor.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                    fechaFinComedor = dp_fecha_fin_comedor.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                });
+                BusyIndicadorComedor.IsBusy = true;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (s, ev) => ListarReportesComedorFecha(fechaInicioComedor, fechaFinComedor);
+                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
+                worker.RunWorkerAsync();
+                lbl_mensajes_comedor.Content = "Datos Actualizados";
+            }
+        }
+
+        private void imgEstadoComedor_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            string id = "";
+            string estadoActual = "";
+            foreach (DataRow item in dgComedor.SelectedItems)
+            {
+                id = item.ItemArray[3].ToString();
+                estadoActual = item.ItemArray[8].ToString();
+            }
+            reporteImpl = new ReporteImpl();
+            lbl_mensajes_comedor.Content = reporteImpl.CambiarEstadoComedor(estadoActual, id);
+            MessageBox.Show("Estado cambiado con exito.", "Acción realizada", MessageBoxButton.OK, MessageBoxImage.Information);
+            lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(63, 81, 181));
+            limpiarDataGridReportes("comedor");
+            ListarReporteComedor();
+        }
+        #endregion
 
         #region ReporteGeneral
         private void ListarReporteGeneral()
@@ -1710,6 +1935,7 @@ namespace food_service_admin
         private void vntPrincipal_Closing(object sender, CancelEventArgs e)
         {
             AutoClosingMessageBox.Show("Cerrando el programa, espere... \nNO CIERRE ESTA VENTANA", "CERRANDO MOBIUS FOOD SERVICE...", 3000);
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Final y cierre de sesion del {1}", DateTime.Now, Sesion.verInfo()));
             //MessageBox.Show("Cerrando el programa, espere...","Cerrando...",MessageBoxButton.OK,MessageBoxImage.Information);
         }
 
@@ -1718,227 +1944,6 @@ namespace food_service_admin
             ListarUsusarios();
         }
 
-        private void ListarReporteComedor()
-        {
-            reporteImpl = new ReporteImpl();
-            System.Data.DataTable dt2 = reporteImpl.ReporteComedor();
-            DataRow dr2;
-            contadorFilasComedor = 1;
-            limpiarDataGridReportes("comedor");
-            foreach (DataRow row2 in dt2.Rows)
-            {
-                dr2 = dt2.NewRow();
-                for (int i = 0; i < row2.ItemArray.Length; i++)
-                {
-                    dr2[0] = contadorFilasComedor;
-                    dr2[i] = row2.ItemArray[i].ToString();
-                    //MessageBox.Show(row2.ItemArray[i].ToString());
-                    if (row2.ItemArray[8].ToString() == "ACTIVO")
-                    {
-                        //MessageBox.Show(row.ItemArray[5].ToString());
-                        dr2[9] = "sources/check.png";
-                    }
-                    if (row2.ItemArray[8].ToString() == "INACTIVO")
-                    {
-                        dr2[9] = "sources/equis.png";
-                    }
-
-                }
-                this.Dispatcher.Invoke(() =>
-                {
-                    dgComedor.Items.Add(dr2);
-                });
-
-                contadorFilasComedor += 1;
-            }
-            
-        }
-        private void ListarReportesComedorTicket(string ticket)
-        {
-            reporteImpl = new ReporteImpl();
-            System.Data.DataTable dt2 = reporteImpl.BuscarPorTicket(ticket);
-            DataRow dr2;
-            contadorFilasComedor = 1;
-            limpiarDataGridReportes("comedor");
-            if (dt2 != null)
-            {
-                foreach (DataRow row2 in dt2.Rows)
-                {
-                    dr2 = dt2.NewRow();
-                    for (int i = 0; i < row2.ItemArray.Length; i++)
-                    {
-                        dr2[0] = contadorFilasComedor;
-                        dr2[i] = row2.ItemArray[i].ToString();
-                        //MessageBox.Show(row2.ItemArray[i].ToString());
-                        if (row2.ItemArray[8].ToString() == "ACTIVO")
-                        {
-                            //MessageBox.Show(row.ItemArray[5].ToString());
-                            dr2[9] = "sources/check.png";
-                        }
-                        if (row2.ItemArray[8].ToString() == "INACTIVO")
-                        {
-                            dr2[9] = "sources/equis.png";
-                        }
-
-                    }
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        dgComedor.Items.Add(dr2);
-                    });
-
-                    contadorFilasComedor += 1;
-                }
-                this.Dispatcher.Invoke(() =>
-                {
-                    lbl_mensajes_comedor.Content = "Tickets encotrados";
-                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80));
-                });
-            }
-            else
-            {
-                limpiarDataGridReportes("comedor");
-                this.Dispatcher.Invoke(() =>
-                {
-                    lbl_mensajes_comedor.Content = "Ticket no encontrado";
-                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(244, 67, 54));
-                });
-
-
-            }
-        }
-        private void ListarReportesComedorFecha(string fechaInicioComedor, string fechaFinComedor)
-        {
-            reporteImpl = new ReporteImpl();
-            System.Data.DataTable dt2 = reporteImpl.BuscarPorFechaComedor(fechaInicioComedor, fechaFinComedor);
-            DataRow dr2;
-            contadorFilasComedor = 1;
-            limpiarDataGridReportes("comedor");
-            if (dt2 != null)
-            {
-                foreach (DataRow row2 in dt2.Rows)
-                {
-                    dr2 = dt2.NewRow();
-                    for (int i = 0; i < row2.ItemArray.Length; i++)
-                    {
-                        dr2[0] = contadorFilasComedor;
-                        dr2[i] = row2.ItemArray[i].ToString();
-                        //MessageBox.Show(row2.ItemArray[i].ToString());
-                        if (row2.ItemArray[8].ToString() == "ACTIVO")
-                        {
-                            //MessageBox.Show(row.ItemArray[5].ToString());
-                            dr2[9] = "sources/check.png";
-                        }
-                        if (row2.ItemArray[8].ToString() == "INACTIVO")
-                        {
-                            dr2[9] = "sources/equis.png";
-                        }
-
-                    }
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        dgComedor.Items.Add(dr2);
-                    });
-
-                    contadorFilasComedor += 1;
-                }
-                this.Dispatcher.Invoke(() =>
-                {
-                    lbl_mensajes_comedor.Content = "Tickets encotrados en esta fecha";
-                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80));
-                });
-            }
-            else
-            {
-                limpiarDataGridReportes("comedor");
-                this.Dispatcher.Invoke(() =>
-                {
-                    lbl_mensajes_comedor.Content = "Ticket no encontrados en estas fechas";
-                    lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(244, 67, 54));
-                });
-
-
-            }
-        }
-
-        private void btn_refrescar_comedor_Loaded(object sender, RoutedEventArgs e)
-        {
-            BusyIndicadorComedor.IsBusy = true;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (s, ev) => ListarReporteComedor();
-            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
-            worker.RunWorkerAsync();
-            lbl_mensajes_comedor.Content = "Datos Cargados";
-        }
-
-        private void btn_refrescar_comedor_Click(object sender, RoutedEventArgs e)
-        {
-            limpiarDataGridReportes("comedor");
-            BusyIndicadorComedor.IsBusy = true;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (s, ev) => ListarReporteComedor();
-            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
-            worker.RunWorkerAsync();
-            lbl_mensajes_comedor.Content = "Datos Actualizados";
-        }
-
-        private void txt_ticket_buscar_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key >= Key.D0 && e.Key <= Key.D9 || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
-                e.Handled = false;
-            else
-                e.Handled = true;
-        }
-
-        private void btn_buscar_ticket_Click(object sender, RoutedEventArgs e)
-        {
-            string ticket = txt_ticket_buscar.Text;
-            BusyIndicadorComedor.IsBusy = true;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (s, ev) => ListarReportesComedorTicket(ticket);
-            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
-            worker.RunWorkerAsync();
-            lbl_mensajes1.Content = "Datos Cargados";
-        }
-
-        private void dp_fecha_fin_comedor_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dp_fecha_inicio_comedor.SelectedDate.ToString() == "")
-            {
-                MessageBox.Show("Seleccione una fecha de inicio primero", "Atención", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-            {
-                string fechaInicioComedor = "";
-                string fechaFinComedor = "";
-                this.Dispatcher.Invoke(() =>
-                {
-                    fechaInicioComedor = dp_fecha_inicio_comedor.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
-                    fechaFinComedor = dp_fecha_fin_comedor.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
-                });
-                BusyIndicadorComedor.IsBusy = true;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (s, ev) => ListarReportesComedorFecha(fechaInicioComedor, fechaFinComedor);
-                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
-                worker.RunWorkerAsync();
-                lbl_mensajes_comedor.Content = "Datos Actualizados";
-            }
-        }
-
-        private void imgEstadoComedor_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            string id = "";
-            string estadoActual = "";
-            foreach (DataRow item in dgComedor.SelectedItems)
-            {
-                id = item.ItemArray[3].ToString();
-                estadoActual = item.ItemArray[8].ToString();
-            }
-            reporteImpl = new ReporteImpl();
-            lbl_mensajes_comedor.Content = reporteImpl.CambiarEstadoComedor(estadoActual, id);
-            MessageBox.Show("Estado cambiado con exito.", "Acción realizada", MessageBoxButton.OK, MessageBoxImage.Information);
-            lbl_mensajes_comedor.Background = new SolidColorBrush(Color.FromRgb(63, 81, 181));
-            limpiarDataGridReportes("comedor");
-            ListarReporteComedor();
-        }
+       
     }
 }

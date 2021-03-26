@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace food_service_admin.ventanas
     /// </summary>
     public partial class Login : Window
     {
-        public static Usuario sesion;
+        //public static Usuario sesion;
         UsuarioImpl usuarioImpl;
 
         public Login()
@@ -37,10 +38,15 @@ namespace food_service_admin.ventanas
                 string user = txt_usuario.Text;
                 string password = psb_password.Password;
                 password = Encrypt.GetMD5(password);
-                var userSelected = usuarioImpl.Login(user, password);
-                if (userSelected != null)
+                DataTable dt = usuarioImpl.Login(user, password);
+                if (dt != null)
                 {
-                    sesion = userSelected;
+                    Sesion.id = int.Parse(dt.Rows[0][0].ToString());
+                    Sesion.nombre = dt.Rows[0][1].ToString();
+                    Sesion.paterno = dt.Rows[0][2].ToString();
+                    Sesion.materno = dt.Rows[0][3].ToString();
+                    Sesion.login = dt.Rows[0][4].ToString();
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Inicio de sesion de el {1}", DateTime.Now,Sesion.verInfo()));
                     MainWindow principal = new MainWindow();
                     principal.Show();
                     this.Close();
