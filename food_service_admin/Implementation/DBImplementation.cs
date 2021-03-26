@@ -10,8 +10,8 @@ namespace Implementation
 {
     public class DBImplementation
     {
-        //public static string connectionString = "Data Source = 192.168.1.5,1433; Initial Catalog = food_service;User Id=user1;Password=user1";
-        public static string connectionString = @"data source = MCLOOPS\MSSQLSERVER19;Initial Catalog=food_service;User ID=sa;Password=CARAJOMEOLVIDE360";
+        public static string connectionString = "Data Source = 192.168.1.5,1433; Initial Catalog = food_service;User Id=user2;Password=user2";
+        //public static string connectionString = @"data source = 192.168.99.1:1433\MSSQLSERVER19;Initial Catalog=food_service;User ID=sa;Password=CARAJOMEOLVIDE360";
         //MCLOOPS\MSSQLSERVER19;Initial Catalog=food_service;User ID=sa
 
         public static SqlCommand CreateBasicCommand()
