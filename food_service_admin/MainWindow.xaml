@@ -439,7 +439,7 @@
                                         <Grid Grid.Row="2"  VerticalAlignment="top" HorizontalAlignment="Stretch">
                                             <StackPanel Orientation="Vertical">
                                                 <DockPanel Margin="0,15,0,0">
-                                                    <Button x:Name="btn_exportar_excel_comedor" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16">Exportar a Excel</Button>
+                                                    <Button x:Name="btn_exportar_excel_comedor" HorizontalAlignment="Left" Margin="10,0,0,0" Height="40" Width="auto" Padding="15,0,15,0" Background="White" BorderBrush="#FFA0A0A0" BorderThickness="2" Foreground="#FF434240" FontSize="16" Click="btn_exportar_excel_comedor_Click">Exportar a Excel</Button>
                                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 
                                                     </StackPanel>

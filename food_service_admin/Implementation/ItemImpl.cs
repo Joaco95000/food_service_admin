@@ -32,6 +32,25 @@ namespace Implementation
             }
         }
 
+        public DataTable listadoProductosParaExcel()
+        {
+            string query = @"SELECT it.id As 'Numero', it.nombre AS 'Nombre', cat.nombre AS 'Categoria', it.precio AS 'Precio', ISNULL('ND', it.stock)  AS 'Stock', (CASE WHEN it.imagen IS NULL THEN'NO' ELSE 'SI' END)  AS 'Imagen', it.estado AS 'Estado'
+                            FROM item AS it
+                            INNER JOIN categoria AS cat ON cat.id = it.categoria;";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public string CambiarEstadoSnack(string estadoActual, string id)
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para Item", DateTime.Now, Sesion.verInfo()));

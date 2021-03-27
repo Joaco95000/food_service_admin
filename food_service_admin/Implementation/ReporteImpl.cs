@@ -37,6 +37,30 @@ namespace Implementation
             }
         }
 
+        public DataTable ReporteVentasUltimos30Dias()
+        {
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY S.fecha  DESC) AS Num,(CAST(S.fecha AS nvarchar(50))+' '+CAST(s.hora AS NVARCHAR(8))) as Fecha, C.nombre+' '+C.paterno+' '+C.materno AS Cliente, C.codigo AS Codigo, I.nombre AS Item, S.cantidad AS cantidad, S.precio as Precio,S.total AS Total, S.orden AS Orden, S.tipo AS Tipo, S.estado AS Estado
+                            FROM snack S
+                            INNER JOIN cliente AS C
+                            ON S.cliente = C.id
+                            INNER JOIN item AS I
+                            ON S.item = I.id
+                            WHERE DATEDIFF(day, S.fecha, getdate()) between 0 and 30 
+                            ORDER BY S.fecha desc;";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public DataTable BuscarPorOrden(string orden)
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar una orden en Ventas con codigo: {2} ", DateTime.Now, Sesion.verInfo(), orden));
@@ -137,6 +161,27 @@ namespace Implementation
                             FROM asistencia A
                             inner JOIN usuario AS U
                             ON a.usuario = U.id
+                            ORDER BY Ingreso desc";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public DataTable ReporteAsistenciaUltimos30Dias()
+        {
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY A.fecha_ingreso  DESC) AS Num, ISNULL(U.nombre,'')+' '+ISNULL(U.paterno,'')+' '+ISNULL(U.materno,'') AS 'Nombre Completo', CAST(A.fecha_ingreso AS nvarchar(50)) AS Ingreso, CAST(DATEPART(WEEKDAY,A.fecha_ingreso) AS nvarchar(15)) AS Dia, ISNULL(CAST(A.fecha_salida AS nvarchar(50)),'--') AS Salida, ISNULL((CAST((DATEDIFF(HOUR,A.hora_ingreso,A.hora_salida)-1) as nvarchar(20)) )+':'+(CAST((DATEDIFF(minute,A.hora_ingreso,A.hora_salida)%60) AS nvarchar(20))),'0:0') AS tiempo, A.estado
+                            FROM asistencia A
+                            inner JOIN usuario AS U
+                            ON a.usuario = U.id
+                            WHERE DATEDIFF(day, A.fecha_ingreso, getdate()) between 0 and 30 
                             ORDER BY Ingreso desc";
             SqlCommand cmd;
             try
@@ -302,7 +347,7 @@ namespace Implementation
                             @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*12) AS 'Total Almuerzo', 
                             ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*10) AS 'Total Cena',"
                             + totalLonches +
-                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
+                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
@@ -321,6 +366,35 @@ namespace Implementation
             }
         }
 
+        public DataTable mostrarDatosGeneralParaExcel(string cantidadLonches, string totalLonches)
+        {
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.nombre, C.paterno, C.materno) AS '№' ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
+                            + cantidadLonches +
+                            @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*12) AS 'Total Almuerzo', 
+                            ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*10) AS 'Total Cena',"
+                            + totalLonches +
+                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
+                            FROM registro AS  R
+                            INNER JOIN cliente C
+                            ON R.cliente = C.id
+                            GROUP BY r.cliente, C.nombre,C.paterno,C.materno
+                            ORDER BY C.nombre,C.paterno,C.materno";
+            try
+            {
+                SqlCommand cmd = DBImplementation.CreateBasicCommand(query);
+                //cmd.Parameters.AddWithValue("@cantidadLonches", cantidadLonches);
+                // cmd.Parameters.AddWithValue("@naAun", naAun);
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         public DataTable mostrarDatosGeneralPorFecha(string cantidadLonches, string totalLonches, string fecha_inicio, string fecha_fin)
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte General del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
@@ -332,7 +406,7 @@ namespace Implementation
                             @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*12) AS 'Total Almuerzo', 
                             ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*10) AS 'Total Cena',"
                             + totalLonches +
-                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
+                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
@@ -370,6 +444,28 @@ namespace Implementation
                             INNER JOIN cliente C
                             ON R.cliente = C.id
                             WHERE R.turno = 'ALMUERZO' OR R.turno = 'CENA'
+                            ORDER BY r.id desc";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public DataTable ReporteComedorUltimos30Dias()
+        {
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY r.id  DESC) AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado
+                            FROM registro AS  R
+                            INNER JOIN cliente C
+                            ON R.cliente = C.id
+                            WHERE R.fecha >= CURRENT_TIMESTAMP -30 AND R.turno = 'ALMUERZO' OR R.turno = 'CENA' AND R.fecha >= CURRENT_TIMESTAMP -30
                             ORDER BY r.id desc";
             SqlCommand cmd;
             try

@@ -64,9 +64,9 @@ namespace food_service_admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Refrescar: "+ex);
+                MessageBox.Show("Refrescar: " + ex);
             }
-            
+
         }
 
         private void ListarUsusarios()
@@ -115,7 +115,7 @@ namespace food_service_admin
             {
                 MessageBox.Show("ListarUsuarios: " + ex);
             }
-            
+
         }
 
         private void txt_nombre_buscar_TextChanged(object sender, TextChangedEventArgs e)
@@ -264,7 +264,7 @@ namespace food_service_admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Cambioestado: "+ex);
+                MessageBox.Show("Cambioestado: " + ex);
 
             }
 
@@ -283,7 +283,7 @@ namespace food_service_admin
                 MessageBox.Show("Cambioestado: " + ex);
 
             }
-            
+
         }
 
         private void btn_nuevo_usuario_Click(object sender, RoutedEventArgs e)
@@ -312,7 +312,7 @@ namespace food_service_admin
                 MessageBox.Show("RefrescarCOm: " + ex);
 
             }
-            
+
         }
         private void ListarComensales()
         {
@@ -360,7 +360,7 @@ namespace food_service_admin
                 MessageBox.Show("ListarCOm: " + ex);
 
             }
-            
+
         }
 
         private void btn_nuevo_comensal_Click(object sender, RoutedEventArgs e)
@@ -601,126 +601,128 @@ namespace food_service_admin
         #endregion
 
 
-        #region botones SAcar reporte
+        #region botones Sacar reporte
         private void btn_exportar_excel_Click(object sender, RoutedEventArgs e)
         {
-            // exportarExcel(dg, "Reporte Usuarios"); 
-            exportarExcelPrimitivo(dg, "Reporte Usuarios");
+            UsuarioImpl usuarioImpl = new UsuarioImpl();
+            var dt = usuarioImpl.listadoUsuariosParaExcel();
+            exportarExcel(dt, "Reporte Usuarios");
         }
 
         private void btn_exportar_excel_comensal_Click(object sender, RoutedEventArgs e)
         {
-            //exportarExcel(dg_comensal, "Reporte Comensales");
-            exportarExcelPrimitivo(dg_comensal, "Reporte Comensales");
+            ClienteImpl clienteImpl = new ClienteImpl();
+            var dt = clienteImpl.listadoClientesParaExcel();
+            exportarExcel(dt, "Reporte Comensales");
         }
 
         private void btn_exportar_excel_snack_Click(object sender, RoutedEventArgs e)
         {
-            //exportarExcel(dg_snack, "Reporte Productos");
-            exportarExcelPrimitivo(dg_snack, "Reporte Productos");
+            ItemImpl itemImpl = new ItemImpl();
+            var dt = itemImpl.listadoProductosParaExcel();
+            exportarExcel(dt, "Reporte Snack");
         }
 
         private void btn_exportar_excel_general_Click(object sender, RoutedEventArgs e)
         {
-            exportarExcelPrimitivo(dgGeneral, "Reporte General");
+            ReporteImpl reporteImpl = new ReporteImpl();
+            var totalesloncjes = reporteImpl.armarConsultaCantidadLonches();
+            var dt = reporteImpl.mostrarDatosGeneralParaExcel(totalesloncjes[0], totalesloncjes[1]);
+            List<string> names = new List<string>();
+            double total = 0;
+            foreach (DataColumn column in dt.Columns)
+            {
+                if (column.ColumnName != "Valor total" && column.ColumnName.Contains("total") || column.ColumnName.Contains("Total"))
+                {
+                    names.Add(column.ColumnName);
+                }
+            }
+            foreach (DataRow row in dt.Rows)
+            {
+                foreach (var name in names)
+                {
+                    total += double.Parse(row[name].ToString());
+                }
+                row["Valor total"] = total.ToString();
+                total = 0;
+            }
+            exportarExcel(dt, "Reporte General");
         }
 
+
+        private void btn_exportar_excel_comedor_Click(object sender, RoutedEventArgs e)
+        {
+            ReporteImpl reporteImpl = new ReporteImpl();
+            var dt = reporteImpl.ReporteComedorUltimos30Dias();
+            exportarExcel(dt, "Reporte Comedor");
+        }
         private void btn_exportar_excel1_Click(object sender, RoutedEventArgs e)
         {
-            exportarExcelPrimitivo(dg1, "Reporte Ventas");
+            ReporteImpl reporteImpl = new ReporteImpl();
+            var dt = reporteImpl.ReporteVentasUltimos30Dias();
+            exportarExcel(dt, "Reporte Ventas");
         }
 
         private void btn_exportar_excel_asistencia_Click(object sender, RoutedEventArgs e)
         {
-            exportarExcelPrimitivo(dgAsistencia, "Reporte Asistencia");
+            ReporteImpl reporteImpl = new ReporteImpl();
+            var dt = reporteImpl.ReporteAsistenciaUltimos30Dias();
+            exportarExcel(dt, "Reporte Asistencias");
         }
         #endregion
 
         #region Excel
-        public void exportarExcel(DataGrid dg, string titulo)
+
+        public void exportarExcel(System.Data.DataTable dt, string titulo)
         {
+            object misValue= System.Reflection.Missing.Value;
+            Excel.Application appExcel = null;
+            Workbook excelWorkbook = null;
+            Worksheet excelWorksheet = null;
             try
             {
-                Excel.Application excel = new Excel.Application();
+                appExcel = new Excel.Application();
+                excelWorkbook = appExcel.Workbooks.Add(misValue);
 
-                Workbook workbook = excel.Workbooks.Add(System.Reflection.Missing.Value);
-                Worksheet sheet1 = (Worksheet)workbook.Sheets[1];
-                excel.Visible = true;
-                for (int j = 0; j < dg.Columns.Count; j++)
+                excelWorksheet = appExcel.ActiveWorkbook.ActiveSheet as Worksheet;
+
+                Range columnsNameRange;
+                columnsNameRange = excelWorksheet.get_Range("A1", misValue).get_Resize(1, dt.Columns.Count);
+
+                string[] arrColumnNames = new string[dt.Columns.Count];
+
+                for (int i = 0; i<dt.Columns.Count; i++)
                 {
-                    if (j != 1)
-                    {
-                        Range myRange = (Range)sheet1.Cells[1, j + 1];
-                        sheet1.Cells[1, j + 1].Font.Bold = true;
-                        sheet1.Columns[j + 1].ColumnWidth = 30;
-                        myRange.Value2 = dg.Columns[j].Header;
-                    }
+                    arrColumnNames[i] = dt.Columns[i].ColumnName;
                 }
 
-                for (int i = 0; i < dg.Columns.Count; i++)
-                {
-                    if (i != 1)
-                    {
-                        for (int j = 0; j < dg.Items.Count; j++)
-                        {
-                            TextBlock b = dg.Columns[i].GetCellContent(dg.Items[j]) as TextBlock;
-                            Microsoft.Office.Interop.Excel.Range myRange = (Microsoft.Office.Interop.Excel.Range)sheet1.Cells[j + 2, i + 1];
-                            if (b == null)
-                            {
-                                myRange.Value2 = "";
-                            }
-                            else
-                            {
-                                myRange.Value2 = b.Text;
-                            }
-                        }
-                    }
+                columnsNameRange.set_Value(misValue, arrColumnNames);
+                columnsNameRange.Font.Bold = true;
+                
+                for (int Idx = 0; Idx<dt.Rows.Count; Idx++)
+                {                      
+                    excelWorksheet.Range["J2"].Offset[Idx].Resize[1, 10].HorizontalAlignment = XlHAlign.xlHAlignRight; 
+                    excelWorksheet.Range["A2"].Offset[Idx].Resize[1, dt.Columns.Count].Value = dt.Rows[Idx].ItemArray;
                 }
+                
+                columnsNameRange.Rows["1"].Cells.Orientation = Excel.XlOrientation.xlUpward;
 
-                sheet1.Columns["B"].Delete();
-
-                Range line = (Range)sheet1.Rows[1];
+                Range line = (Range)columnsNameRange.Rows[1];
                 line.Insert();
 
-                var range = sheet1.get_Range("A1", "F1");
-                range.Font.Size = 20;
-                range.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                range.Font.Bold = true;
-                range.Merge(true);
+                columnsNameRange.Columns.EntireColumn.AutoFit();
+
 
                 var fechaDoc = DateTime.Now.ToString("ddMMyyyyHHmmss");
                 var fechaTit = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
                 var tituloCompletoDoc = titulo + " " + fechaDoc;
                 var tituloCompletoTit = titulo + " " + fechaTit;
-                range.Value2 = tituloCompletoTit;
-                workbook.SaveAs(tituloCompletoDoc);
-
-                MessageBox.Show(tituloCompletoTit + " exportado con exito");
+                excelWorkbook.SaveAs(tituloCompletoDoc);
+                MessageBox.Show(tituloCompletoTit + " exportado con exito en Documentos");
+                appExcel.Visible = true;
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+               catch { MessageBox.Show("Error Al Exportar el Reporte"); }
         }
-
-        public void exportarExcelPrimitivo(DataGrid dg, string titulo)
-        {
-            dg.SelectionMode = (DataGridSelectionMode)SelectionMode.Multiple;
-            dg.SelectAllCells();
-            dg.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            ApplicationCommands.Copy.Execute(null, dg);
-            String resultat = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
-            String result = (string)Clipboard.GetData(DataFormats.Text);
-            dg.UnselectAllCells();
-            var fecha = DateTime.Now.ToString("ddMMyyyyHHmmss");
-            System.IO.StreamWriter file1 = new System.IO.StreamWriter(@"D:\" + titulo + " " + fecha + ".xls");
-            file1.WriteLine(result);
-            file1.Close();
-            dg.SelectionMode = (DataGridSelectionMode)SelectionMode.Single;
-            MessageBox.Show("Reporte Generado con exito en D:\\" + titulo + " " + fecha + ".xls");
-        }
-
         #endregion
 
         #region Style
@@ -1944,6 +1946,6 @@ namespace food_service_admin
             ListarUsusarios();
         }
 
-       
+        
     }
 }

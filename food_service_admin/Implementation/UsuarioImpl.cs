@@ -156,6 +156,23 @@ namespace Implementation
             }
         }
 
+        public DataTable listadoUsuariosParaExcel()
+        {
+            string query = @"SELECT id As Codigo, nombre AS Nombre, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, documento AS Documento, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Fotografia, estado AS Estado FROM usuario";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Error: ListarUsuarios {1}", DateTime.Now, ex.Message));
+                throw ex;
+            }
+        }
+
         public DataTable Login(string user, string password)
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Intendando ingresar al sistema", DateTime.Now));

@@ -50,6 +50,24 @@ namespace Implementation
             }
         }
 
+        public DataTable listadoClientesParaExcel()
+        {
+            string query = @"SELECT codigo As Ficha, nombre AS Nombres, (paterno+' '+ISNULL(materno,' ')) AS Apellidos, (CASE WHEN tipo = 0 THEN'NORMAL' ELSE 'EMPRESA' END)  AS Tipo, (CASE WHEN fotografia IS NULL THEN'NO' ELSE 'SI' END)  AS Imagen, estado AS Estado
+                            FROM cliente;";
+            SqlCommand cmd;
+            try
+            {
+                cmd = DBImplementation.CreateBasicCommand(query);
+
+                return DBImplementation.ExecuteDataTableCommand(cmd);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public string CambiarEstadoComesal(string estadoActual, string codigo)
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Inicio del metodo CambiarEstado para Comensal", DateTime.Now, Sesion.verInfo()));
