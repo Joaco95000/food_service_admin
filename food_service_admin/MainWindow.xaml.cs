@@ -604,27 +604,49 @@ namespace food_service_admin
         #region botones Sacar reporte
         private void btn_exportar_excel_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "Usuario", Sesion.verInfo()));
             UsuarioImpl usuarioImpl = new UsuarioImpl();
             var dt = usuarioImpl.listadoUsuariosParaExcel();
-            exportarExcel(dt, "Reporte Usuarios");
+            
+            BusyIndicadorUsuario.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte Usuarios");
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorUsuario.IsBusy = false;
+            worker.RunWorkerAsync();
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "Usuario", Sesion.verInfo()));
         }
 
         private void btn_exportar_excel_comensal_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "Comensal", Sesion.verInfo()));
             ClienteImpl clienteImpl = new ClienteImpl();
             var dt = clienteImpl.listadoClientesParaExcel();
-            exportarExcel(dt, "Reporte Comensales");
+            
+            BusyIndicadorComensal.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte Comensales");
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComensal.IsBusy = false;
+            worker.RunWorkerAsync();
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "Comensal", Sesion.verInfo()));
         }
 
         private void btn_exportar_excel_snack_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "Snack", Sesion.verInfo()));
             ItemImpl itemImpl = new ItemImpl();
             var dt = itemImpl.listadoProductosParaExcel();
-            exportarExcel(dt, "Reporte Snack");
+            
+            BusyIndicadorSnack.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte Snack");
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorSnack.IsBusy = false;
+            worker.RunWorkerAsync();
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "Snack", Sesion.verInfo()));
         }
 
         private void btn_exportar_excel_general_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
             ReporteImpl reporteImpl = new ReporteImpl();
             var totalesloncjes = reporteImpl.armarConsultaCantidadLonches();
             var dt = reporteImpl.mostrarDatosGeneralParaExcel(totalesloncjes[0], totalesloncjes[1]);
@@ -646,28 +668,53 @@ namespace food_service_admin
                 row["Valor total"] = total.ToString();
                 total = 0;
             }
-            exportarExcel(dt, "Reporte General");
-        }
 
+            BusyIndicadorGeneral.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte General");
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorGeneral.IsBusy = false;
+            worker.RunWorkerAsync();  
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
+        }
 
         private void btn_exportar_excel_comedor_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "Comedor", Sesion.verInfo()));
             ReporteImpl reporteImpl = new ReporteImpl();
             var dt = reporteImpl.ReporteComedorUltimos30Dias();
-            exportarExcel(dt, "Reporte Comedor");
+
+            BusyIndicadorComedor.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte Comedor");
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorComedor.IsBusy = false;
+            worker.RunWorkerAsync();  
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "Comedor", Sesion.verInfo()));
         }
         private void btn_exportar_excel1_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "Ventas", Sesion.verInfo()));
             ReporteImpl reporteImpl = new ReporteImpl();
-            var dt = reporteImpl.ReporteVentasUltimos30Dias();
-            exportarExcel(dt, "Reporte Ventas");
+            var dt = reporteImpl.ReporteVentasUltimos30Dias();            
+            BusyIndicador.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte Ventas");
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicador.IsBusy = false;
+            worker.RunWorkerAsync();
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "Ventas", Sesion.verInfo()));
         }
 
         private void btn_exportar_excel_asistencia_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "Asistencia", Sesion.verInfo()));
             ReporteImpl reporteImpl = new ReporteImpl();
             var dt = reporteImpl.ReporteAsistenciaUltimos30Dias();
-            exportarExcel(dt, "Reporte Asistencias");
+            
+            BusyIndicadorAsistencia.IsBusy = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte Asistencias");
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorAsistencia.IsBusy = false;
+            worker.RunWorkerAsync();
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "Asistencia", Sesion.verInfo()));
         }
         #endregion
 
@@ -718,7 +765,7 @@ namespace food_service_admin
                 var tituloCompletoDoc = titulo + " " + fechaDoc;
                 var tituloCompletoTit = titulo + " " + fechaTit;
                 excelWorkbook.SaveAs(tituloCompletoDoc);
-                MessageBox.Show(tituloCompletoTit + " exportado con exito en Documentos");
+                MessageBox.Show(tituloCompletoTit + " exportado con exito en Documentos", "Exportacion de Excel", MessageBoxButton.OK, MessageBoxImage.Information);
                 appExcel.Visible = true;
             }
                catch { MessageBox.Show("Error Al Exportar el Reporte"); }

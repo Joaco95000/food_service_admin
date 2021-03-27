@@ -17,14 +17,16 @@
                     <TabItem.Header>
                         <Label x:Name="lbl_usuarios_header" Content="USUARIOS" Foreground="#FFFFA51B" FontWeight="Bold" FontStyle="Italic"></Label>
                     </TabItem.Header>
-                    <TabItem.Background>
+                    
+                        <TabItem.Background>
                         <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                             <GradientStop Color="#FFF0F0F0" Offset="0"/>
                             <GradientStop Color="White" Offset="1"/>
                         </LinearGradientBrush>
                     </TabItem.Background>
                     <!--Contenido usuarios-->
-                    <Grid>
+                <extToolkit:BusyIndicator BusyContent="Cargando Datos..." x:Name="BusyIndicadorUsuario">
+                        <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="3.5*"/>
@@ -102,9 +104,10 @@
                         </Grid>
                         <!--Fin final sin joder-->
                     </Grid>
-
+                </extToolkit:BusyIndicator>
                     <!--Fin Contenido usuarios-->
                 </TabItem>
+                    
                 <TabItem x:Name="ti_comensales"  BorderBrush="White" Foreground="#FF949494" GotFocus="ti_comensales_GotFocus" LostFocus="ti_comensales_LostFocus">
                     <TabItem.Header>
                         <Label x:Name="lbl_comensales_header" Content="COMENSALES" Foreground="#FF949499" FontSize="15"></Label>
@@ -115,9 +118,9 @@
                             <GradientStop Color="White" Offset="1"/>
                         </LinearGradientBrush>
                     </TabItem.Background>
-
                     <!--Contenido comensal-->
-                    <Grid>
+                    <extToolkit:BusyIndicator BusyContent="Cargando Datos..." x:Name="BusyIndicadorComensal">
+                        <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="3.5*"/>
@@ -194,10 +197,8 @@
                         </Grid>
                         <!--Fin final sin joder-->
                     </Grid>
-
+                    </extToolkit:BusyIndicator>
                     <!--Fin Contenido comensal-->
-
-
                 </TabItem>
                 <TabItem x:Name="ti_snack" BorderBrush="White" Foreground="#FF949494" LostFocus="ti_snack_LostFocus" GotFocus="ti_snack_GotFocus">
                     <TabItem.Header>
@@ -209,9 +210,9 @@
                             <GradientStop Color="White" Offset="1"/>
                         </LinearGradientBrush>
                     </TabItem.Background>
-
                     <!--Contenido Snack-->
-                    <Grid>
+                    <extToolkit:BusyIndicator BusyContent="Cargando Datos..." x:Name="BusyIndicadorSnack">
+                        <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="3.5*"/>
@@ -271,9 +272,8 @@
                         </Grid>
                         <!--Fin final sin joder-->
                     </Grid>
-
+                    </extToolkit:BusyIndicator>
                     <!--Fin Contenido comensal-->
-
                 </TabItem>
 
                 <TabItem x:Name="ti_reportes" BorderBrush="White" Foreground="#FF949494" GotFocus="ti_reportes_GotFocus" LostFocus="ti_reportes_LostFocus">
