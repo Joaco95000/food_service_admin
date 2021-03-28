@@ -418,18 +418,19 @@
                                                         <DataGridTemplateColumn>
                                                             <DataGridTemplateColumn.CellTemplate>
                                                                 <DataTemplate>
-                                                                    <Image x:Name="imgEstadoComedor" Height="15" Width="15" Source="{Binding [9]}" MouseLeftButtonUp="imgEstadoComedor_MouseLeftButtonUp"/>
+                                                                    <Image x:Name="imgEstadoComedor" Height="15" Width="15" Source="{Binding [10]}" MouseLeftButtonUp="imgEstadoComedor_MouseLeftButtonUp"/>
                                                                 </DataTemplate>
                                                             </DataGridTemplateColumn.CellTemplate>
                                                         </DataGridTemplateColumn>
                                                         <DataGridTextColumn Header="Fecha" Width="*" Binding="{Binding [1]}"/>
                                                         <DataGridTextColumn Header="Cliente" Width="*" Binding="{Binding [2]}"/>
-                                                        <DataGridTextColumn Header="Ticket" Width="100" Binding="{Binding [3]}"/>
-                                                        <DataGridTextColumn Header="Turno" Width="100" Binding="{Binding [4]}"/>
-                                                        <DataGridTextColumn Header="Cuenta" Width="100" Binding="{Binding [5]}"/>
-                                                        <DataGridTextColumn Header="Cantidad" Width="80" Binding="{Binding [6]}"/>
-                                                        <DataGridTextColumn Header="Tipo" Width="80" Binding="{Binding [7]}"/>
-                                                        <DataGridTextColumn Header="Estado" Width="80" Binding="{Binding [8]}"/>
+                                                        <DataGridTextColumn Header="Codigo" Width="100" Binding="{Binding [3]}"/>
+                                                        <DataGridTextColumn Header="Ticket" Width="100" Binding="{Binding [4]}"/>
+                                                        <DataGridTextColumn Header="Turno" Width="100" Binding="{Binding [5]}"/>
+                                                        <DataGridTextColumn Header="Cuenta" Width="100" Binding="{Binding [6]}"/>
+                                                        <DataGridTextColumn Header="Cantidad" Width="80" Binding="{Binding [7]}"/>
+                                                        <DataGridTextColumn Header="Tipo" Width="80" Binding="{Binding [8]}"/>
+                                                        <DataGridTextColumn Header="Estado" Width="80" Binding="{Binding [9]}"/>
                                                     </DataGrid.Columns>
                                                 </DataGrid>
                                             </extToolkit:BusyIndicator>

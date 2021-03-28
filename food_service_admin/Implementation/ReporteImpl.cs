@@ -338,9 +338,44 @@ namespace Implementation
             };
         }
 
+        //fecha
+        public List<string> armarConsultaCantidadLonchesFecha()
+        {
+            List<string> list = new List<string>();
+            var res = "";
+            var res2 = "";
+            string query = @"SELECT id, nombre 
+                            FROM item
+                            WHERE nombre LIKE '%LONCHE%';";
+            try
+            {
+                SqlCommand cmd = DBImplementation.CreateBasicCommand(query);
+                var lonches = DBImplementation.ExecuteDataTableCommand(cmd);
+                //var x = 1;
+
+                foreach (DataRow item in lonches.Rows)
+                {
+
+                    res = res + "ISNULL((SELECT SUM(sna.cantidad) FROM snack  sna WHERE sna.item= " + item[0].ToString() + " AND sna.cliente=R.cliente AND sna.estado='ACTIVO' AND sna.fecha >= @fechaInicio AND sna.fecha <= @fechaFinal),0) AS '" + item[1] + "', \n";
+                }
+                list.Add(res);
+                foreach (DataRow item in lonches.Rows)
+                {
+                    res2 = res2 + "ISNULL((SELECT SUM(sna.total) FROM snack  sna WHERE sna.item= " + item[0].ToString() + " AND sna.cliente=R.cliente AND sna.estado='ACTIVO' AND sna.fecha >= @fechaInicio AND sna.fecha <= @fechaFinal),0) AS '" + item[1] + " Total', \n";
+                }
+                list.Add(res2);
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            };
+        }
+        //fin fecha
+
         public DataTable mostrarDatosGeneral(string cantidadLonches, string totalLonches)
         {
-            string query = @"SELECT '' AS '№' ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+            string query = @"SELECT '' AS '№', C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
                             + cantidadLonches +
@@ -351,7 +386,7 @@ namespace Implementation
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
-                            GROUP BY r.cliente, C.nombre,C.paterno,C.materno
+                            GROUP BY C.codigo, r.cliente, C.nombre,C.paterno,C.materno
                             ORDER BY C.nombre,C.paterno,C.materno";
             try
             {
@@ -399,19 +434,19 @@ namespace Implementation
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte General del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
             DataTable dt = new DataTable();
-            string query = @"SELECT '' AS '№' ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
-                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
+            string query = @"SELECT '' AS '№', C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal) AS Almuerzo,
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
                             + cantidadLonches +
-                            @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*12) AS 'Total Almuerzo', 
-                            ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*10) AS 'Total Cena',"
+                            @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal)*12) AS 'Total Almuerzo', 
+                            ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal)*10) AS 'Total Cena',"
                             + totalLonches +
-                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
+                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO' AND S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal),0) AS 'Total Snack', '' AS 'Valor total'
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
                             WHERE R.fecha >= @fechaInicio AND R.fecha <= @fechaFinal
-                            GROUP BY r.cliente, C.nombre,C.paterno,C.materno
+                            GROUP BY C.codigo, r.cliente, C.nombre,C.paterno,C.materno
                             ORDER BY C.nombre,C.paterno,C.materno";
             try 
             {
@@ -439,7 +474,7 @@ namespace Implementation
         #region Comedor
         public DataTable ReporteComedor()
         {
-            string query = @"SELECT TOP (2000) '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
+            string query = @"SELECT TOP (2000) '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente', C.codigo AS Codigo,R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
@@ -485,7 +520,7 @@ namespace Implementation
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando buscar en Comedor el ticket: {2} ", DateTime.Now, Sesion.verInfo(), ticket));
             DataTable dt = new DataTable();
-            string query = @"SELECT '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
+            string query = @"SELECT '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente', C.codigo AS Codigo,R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
@@ -516,7 +551,7 @@ namespace Implementation
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte de Comedor del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fechaInicioComedor, fechaFinComedor));
             DataTable dt = new DataTable();
-            string query = @"SELECT TOP (2000) '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
+            string query = @"SELECT TOP (2000) '' AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente', C.codigo AS Codigo,R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado, '' AS Cambio
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id

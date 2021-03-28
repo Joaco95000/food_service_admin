@@ -1553,14 +1553,14 @@ namespace food_service_admin
                     dr2[0] = contadorFilasComedor;
                     dr2[i] = row2.ItemArray[i].ToString();
                     //MessageBox.Show(row2.ItemArray[i].ToString());
-                    if (row2.ItemArray[8].ToString() == "ACTIVO")
+                    if (row2.ItemArray[9].ToString() == "ACTIVO")
                     {
                         //MessageBox.Show(row.ItemArray[5].ToString());
-                        dr2[9] = "sources/check.png";
+                        dr2[10] = "sources/check.png";
                     }
-                    if (row2.ItemArray[8].ToString() == "INACTIVO")
+                    if (row2.ItemArray[9].ToString() == "INACTIVO")
                     {
-                        dr2[9] = "sources/equis.png";
+                        dr2[10] = "sources/equis.png";
                     }
 
                 }
@@ -1590,14 +1590,14 @@ namespace food_service_admin
                         dr2[0] = contadorFilasComedor;
                         dr2[i] = row2.ItemArray[i].ToString();
                         //MessageBox.Show(row2.ItemArray[i].ToString());
-                        if (row2.ItemArray[8].ToString() == "ACTIVO")
+                        if (row2.ItemArray[9].ToString() == "ACTIVO")
                         {
                             //MessageBox.Show(row.ItemArray[5].ToString());
-                            dr2[9] = "sources/check.png";
+                            dr2[10] = "sources/check.png";
                         }
-                        if (row2.ItemArray[8].ToString() == "INACTIVO")
+                        if (row2.ItemArray[9].ToString() == "INACTIVO")
                         {
-                            dr2[9] = "sources/equis.png";
+                            dr2[10] = "sources/equis.png";
                         }
 
                     }
@@ -1643,14 +1643,14 @@ namespace food_service_admin
                         dr2[0] = contadorFilasComedor;
                         dr2[i] = row2.ItemArray[i].ToString();
                         //MessageBox.Show(row2.ItemArray[i].ToString());
-                        if (row2.ItemArray[8].ToString() == "ACTIVO")
+                        if (row2.ItemArray[9].ToString() == "ACTIVO")
                         {
                             //MessageBox.Show(row.ItemArray[5].ToString());
-                            dr2[9] = "sources/check.png";
+                            dr2[10] = "sources/check.png";
                         }
-                        if (row2.ItemArray[8].ToString() == "INACTIVO")
+                        if (row2.ItemArray[9].ToString() == "INACTIVO")
                         {
-                            dr2[9] = "sources/equis.png";
+                            dr2[10] = "sources/equis.png";
                         }
 
                     }
@@ -1750,8 +1750,8 @@ namespace food_service_admin
             string estadoActual = "";
             foreach (DataRow item in dgComedor.SelectedItems)
             {
-                id = item.ItemArray[3].ToString();
-                estadoActual = item.ItemArray[8].ToString();
+                id = item.ItemArray[4].ToString();
+                estadoActual = item.ItemArray[9].ToString();
             }
             reporteImpl = new ReporteImpl();
             lbl_mensajes_comedor.Content = reporteImpl.CambiarEstadoComedor(estadoActual, id);
@@ -1850,7 +1850,7 @@ namespace food_service_admin
         {
             //inicio
             reporteImpl = new ReporteImpl();
-            var totalesloncjes = reporteImpl.armarConsultaCantidadLonches();
+            var totalesloncjes = reporteImpl.armarConsultaCantidadLonchesFecha();
             System.Data.DataTable dt = reporteImpl.mostrarDatosGeneralPorFecha(totalesloncjes[0], totalesloncjes[1], fechaInicioGeneral, fechaFinGeneral);
             int binding = 0;
             double totalSumatoria = 0;
