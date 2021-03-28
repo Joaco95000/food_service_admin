@@ -403,7 +403,7 @@ namespace Implementation
 
         public DataTable mostrarDatosGeneralParaExcel(string cantidadLonches, string totalLonches)
         {
-            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.nombre, C.paterno, C.materno) AS '№' ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.nombre, C.paterno, C.materno) AS '№' , C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
                             + cantidadLonches +
@@ -414,7 +414,7 @@ namespace Implementation
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
-                            GROUP BY r.cliente, C.nombre,C.paterno,C.materno
+                            GROUP BY C.codigo, r.cliente, C.nombre,C.paterno,C.materno
                             ORDER BY C.nombre,C.paterno,C.materno";
             try
             {
@@ -425,6 +425,45 @@ namespace Implementation
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+        }
+
+        public DataTable mostrarDatosGeneralPorFechaParaExcel(string cantidadLonches, string totalLonches, string fecha_inicio, string fecha_fin)
+        {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte General del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
+            DataTable dt = new DataTable();
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.nombre, C.paterno, C.materno) AS '№' , C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
+                            + cantidadLonches +
+                            @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*12) AS 'Total Almuerzo', 
+                            ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*10) AS 'Total Cena',"
+                            + totalLonches +
+                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
+                            FROM registro AS  R
+                            INNER JOIN cliente C
+                            ON R.cliente = C.id
+                            WHERE R.fecha >= @fechaInicio AND R.fecha <= @fechaFinal    
+                            GROUP BY C.codigo, r.cliente, C.nombre,C.paterno,C.materno
+                            ORDER BY C.nombre,C.paterno,C.materno";
+            try
+            {
+                SqlCommand cmd = DBImplementation.CreateBasicCommand(query);
+                cmd.Parameters.AddWithValue("@fechaInicio", fecha_inicio);
+                cmd.Parameters.AddWithValue("@fechaFinal", fecha_fin);
+                dt = DBImplementation.ExecuteDataTableCommand(cmd);
+                if (dt.Rows.Count > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Se saco un reporte General del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
+                    return dt;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} | {2} |-| Error: General Buscar por Fecha {1}", DateTime.Now, ex.Message, Sesion.verInfo()));
                 throw ex;
             }
         }
@@ -496,7 +535,7 @@ namespace Implementation
 
         public DataTable ReporteComedorUltimos30Dias()
         {
-            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY r.id  DESC) AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente',R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY r.id  DESC) AS '№', (CAST(R.fecha AS nvarchar(50))+' '+CAST(R.hora AS NVARCHAR(8))) as Fecha, ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Cliente', C.codigo AS Codigo, R.id AS Ticket ,R.turno AS 'Turno', R.cuenta AS 'Cuenta', R.cantidad AS 'Cantidad', R.tipo AS Tipo, R.estado AS Estado
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id

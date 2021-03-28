@@ -648,8 +648,22 @@ namespace food_service_admin
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
             ReporteImpl reporteImpl = new ReporteImpl();
-            var totalesloncjes = reporteImpl.armarConsultaCantidadLonches();
-            var dt = reporteImpl.mostrarDatosGeneralParaExcel(totalesloncjes[0], totalesloncjes[1]);
+            System.Data.DataTable dt;
+
+            if (dp_fecha_inicio_general.SelectedDate.ToString() != "" && dp_fecha_fin_general.SelectedDate.ToString() != "")
+            {
+                var fechaInicioGeneral = dp_fecha_inicio_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                var fechaFinGeneral = dp_fecha_fin_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                var totalesloncjes = reporteImpl.armarConsultaCantidadLonchesFecha();
+                dt = reporteImpl.mostrarDatosGeneralPorFechaParaExcel(totalesloncjes[0], totalesloncjes[1], fechaInicioGeneral, fechaFinGeneral);    
+                //ARREGLAR TIEMPO DE RESPUESTA
+            }
+            else
+            {
+                var totalesloncjes = reporteImpl.armarConsultaCantidadLonches();
+                dt = reporteImpl.mostrarDatosGeneralParaExcel(totalesloncjes[0], totalesloncjes[1]);
+            }
+           
             List<string> names = new List<string>();
             double total = 0;
             foreach (DataColumn column in dt.Columns)
