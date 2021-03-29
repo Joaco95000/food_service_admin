@@ -475,7 +475,7 @@ namespace Implementation
             DataTable dt = new DataTable();
             string query = @"SELECT '' AS '№', C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal) AS Almuerzo,
-                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal) AS Cena,"
                             + cantidadLonches +
                             @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal)*12) AS 'Total Almuerzo', 
                             ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal)*10) AS 'Total Cena',"
@@ -484,9 +484,11 @@ namespace Implementation
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
-                            WHERE R.fecha >= @fechaInicio AND R.fecha <= @fechaFinal
-                            GROUP BY C.codigo, r.cliente, C.nombre,C.paterno,C.materno
-                            ORDER BY C.nombre,C.paterno,C.materno";
+                            INNER JOIN snack S
+							ON S.cliente = R.cliente
+                            WHERE R.fecha >= @fechaInicio AND R.fecha <= @fechaFinal OR S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal
+                            GROUP BY C.id, C.codigo, r.cliente, C.nombre,C.paterno,C.materno
+                            ORDER BY C.id";
             try 
             {
                 SqlCommand cmd = DBImplementation.CreateBasicCommand(query);

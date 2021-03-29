@@ -1925,11 +1925,19 @@ namespace food_service_admin
 
                     dr[fincol - 1] = totalSumatoria;
 
-                    this.Dispatcher.Invoke(() =>
+                    if (totalSumatoria == 0)
                     {
-                        dgGeneral.Items.Add(dr);
-                    });
-                    contadorFilasAux += 1;
+                        //no agrega porque tiene 0 consumo
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            dgGeneral.Items.Add(dr);
+                        });
+                        contadorFilasAux += 1;
+                    }
+
 
                 }
 
@@ -1954,27 +1962,7 @@ namespace food_service_admin
         }
         private void dp_fecha_fin_general_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dp_fecha_inicio_general.SelectedDate.ToString() == "")
-            {
-                MessageBox.Show("Seleccione una fecha de inicio primero", "Atención", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-            {
-                string fechaInicioGeneral = "";
-                string fechaFinGeneral = "";
-                this.Dispatcher.Invoke(() =>
-                {
-                    fechaInicioGeneral = dp_fecha_inicio_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
-                    fechaFinGeneral = dp_fecha_fin_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
-                    //MessageBox.Show(fechaInicioGeneral+" "+fechaFinGeneral);
-                });
-                BusyIndicadorGeneral.IsBusy = true;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (s, ev) => ListarReporteGeneralFecha(fechaInicioGeneral, fechaFinGeneral);
-                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorGeneral.IsBusy = false;
-                worker.RunWorkerAsync();
-                lbl_mensajes_general.Content = "Datos Actualizados";
-            }
+           
         }
         private void btn_refrescar_general_Click(object sender, RoutedEventArgs e)
         {
@@ -2007,6 +1995,29 @@ namespace food_service_admin
             ListarUsusarios();
         }
 
-        
+        private void btn_buscar_fecha_Click(object sender, RoutedEventArgs e)
+        {
+            if (dp_fecha_inicio_general.SelectedDate.ToString() == "")
+            {
+                MessageBox.Show("Seleccione una fecha de inicio primero", "Atención", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                string fechaInicioGeneral = "";
+                string fechaFinGeneral = "";
+                this.Dispatcher.Invoke(() =>
+                {
+                    fechaInicioGeneral = dp_fecha_inicio_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                    fechaFinGeneral = dp_fecha_fin_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                    //MessageBox.Show(fechaInicioGeneral+" "+fechaFinGeneral);
+                });
+                BusyIndicadorGeneral.IsBusy = true;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (s, ev) => ListarReporteGeneralFecha(fechaInicioGeneral, fechaFinGeneral);
+                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorGeneral.IsBusy = false;
+                worker.RunWorkerAsync();
+                lbl_mensajes_general.Content = "Datos Actualizados";
+            }
+        }
     }
 }

@@ -318,7 +318,8 @@
                                                                 <Label Content="Fecha:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
                                                                 <DatePicker Height="30" x:Name="dp_fecha_inicio_general"></DatePicker>
                                                                 <Label Content="al" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
-                                                                <DatePicker Height="30" x:Name="dp_fecha_fin_general" SelectedDateChanged="dp_fecha_fin_general_SelectedDateChanged"></DatePicker>
+                                                                <DatePicker Height="30" x:Name="dp_fecha_fin_general"></DatePicker>
+                                                                <Button x:Name="btn_buscar_fecha"  HorizontalAlignment="Right" Margin="10,0,10,0" Height="auto" Width="150" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center" BorderBrush="#FFBAB9B9" HorizontalContentAlignment="Center" Background="White" Click="btn_buscar_fecha_Click">Buscar por fecha</Button>
                                                             </StackPanel>
                                                         </StackPanel>
                                                         <Button x:Name="btn_refrescar_general" Click="btn_refrescar_general_Click" HorizontalAlignment="Right" Margin="0,0,10,10" Height="70" Width="120" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center" BorderBrush="#FFBAB9B9" HorizontalContentAlignment="Center" Background="White" Loaded="btn_refrescar_general_Loaded">Actualizar</Button>
