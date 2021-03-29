@@ -994,10 +994,10 @@ namespace food_service_admin
                     dr2[0] = contadorFilas;
                     dr2[i] = row2.ItemArray[i].ToString();
                     //MessageBox.Show(row2.ItemArray[i].ToString());
-                    if (row2.ItemArray[9].ToString() == "0")
-                    {
-                        dr2[9] = "TOUCH";
-                    }
+                    //if (row2.ItemArray[9].ToString() == "0")
+                    //{
+                    //    dr2[9] = "TOUCH";
+                    //}
                     if (row2.ItemArray[10].ToString() == "ACTIVO")
                     {
                         //MessageBox.Show(row.ItemArray[5].ToString());
@@ -1058,10 +1058,10 @@ namespace food_service_admin
                     {
                         dr[0] = contadorFilas;
                         dr[i] = row.ItemArray[i].ToString();
-                        if (row.ItemArray[9].ToString() == "0")
-                        {
-                            dr[9] = "TOUCH";
-                        }
+                        //if (row.ItemArray[9].ToString() == "0")
+                        //{
+                        //    dr[9] = "TOUCH";
+                        //}
                         if (row.ItemArray[10].ToString() == "ACTIVO")
                         {
                             dr[11] = "sources/arrow_green.png";
@@ -1118,10 +1118,10 @@ namespace food_service_admin
                     {
                         dr[0] = contadorFilas;
                         dr[i] = row.ItemArray[i].ToString();
-                        if (row.ItemArray[9].ToString() == "0")
-                        {
-                            dr[9] = "TOUCH";
-                        }
+                        //if (row.ItemArray[9].ToString() == "0")
+                        //{
+                        //    dr[9] = "TOUCH";
+                        //}
                         if (row.ItemArray[10].ToString() == "ACTIVO")
                         {
                             dr[11] = "sources/arrow_green.png";
@@ -1169,7 +1169,7 @@ namespace food_service_admin
             lbl_mensajes1.Content = "Datos Cargados";
         }
 
-        private void dp_fecha_fin_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void btn_buscar_fecha_ventas_Click(object sender, RoutedEventArgs e)
         {
             if (dp_fecha_inicio.SelectedDate.ToString() == "")
             {
@@ -1422,7 +1422,7 @@ namespace food_service_admin
             
         }
 
-        private void dp_fecha_fin_asistencia_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void btn_buscar_fecha_asistencia_Click(object sender, RoutedEventArgs e)
         {
             if (dp_fecha_inicio_asistencia.SelectedDate.ToString() == "")
             {
@@ -1445,7 +1445,6 @@ namespace food_service_admin
                 lbl_mensajes1.Content = "Datos Actualizados";
             }
         }
-
         private void ListarReportesAsistenciaFecha(string fechaInicio, string fechaFin)
         {
             reporteImpl = new ReporteImpl();
@@ -1734,7 +1733,7 @@ namespace food_service_admin
             lbl_mensajes1.Content = "Datos Cargados";
         }
 
-        private void dp_fecha_fin_comedor_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void btn_buscar_fecha_comedor_Click(object sender, RoutedEventArgs e)
         {
             if (dp_fecha_inicio_comedor.SelectedDate.ToString() == "")
             {
@@ -1976,25 +1975,6 @@ namespace food_service_admin
             lbl_mensajes_general.Content = "Datos Cargados";
         }
 
-
-
-
-        #endregion
-
-        #endregion
-
-        private void vntPrincipal_Closing(object sender, CancelEventArgs e)
-        {
-            AutoClosingMessageBox.Show("Cerrando el programa, espere... \nNO CIERRE ESTA VENTANA", "CERRANDO MOBIUS FOOD SERVICE...", 3000);
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Final y cierre de sesion del {1}", DateTime.Now, Sesion.verInfo()));
-            //MessageBox.Show("Cerrando el programa, espere...","Cerrando...",MessageBoxButton.OK,MessageBoxImage.Information);
-        }
-
-        private void btn_limpiar_codigo_Loaded(object sender, RoutedEventArgs e)
-        {
-            ListarUsusarios();
-        }
-
         private void btn_buscar_fecha_Click(object sender, RoutedEventArgs e)
         {
             if (dp_fecha_inicio_general.SelectedDate.ToString() == "")
@@ -2019,5 +1999,24 @@ namespace food_service_admin
                 lbl_mensajes_general.Content = "Datos Actualizados";
             }
         }
+
+
+        #endregion
+
+        #endregion
+
+        private void vntPrincipal_Closing(object sender, CancelEventArgs e)
+        {
+            AutoClosingMessageBox.Show("Cerrando el programa, espere... \nNO CIERRE ESTA VENTANA", "CERRANDO MOBIUS FOOD SERVICE...", 3000);
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Final y cierre de sesion del {1}", DateTime.Now, Sesion.verInfo()));
+            //MessageBox.Show("Cerrando el programa, espere...","Cerrando...",MessageBoxButton.OK,MessageBoxImage.Information);
+        }
+
+        private void btn_limpiar_codigo_Loaded(object sender, RoutedEventArgs e)
+        {
+            ListarUsusarios();
+        }
+
+        
     }
 }

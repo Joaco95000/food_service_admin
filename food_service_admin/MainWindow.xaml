@@ -402,7 +402,8 @@
                                                             <Label Content="Fecha:" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
                                                             <DatePicker Height="30" x:Name="dp_fecha_inicio_comedor"></DatePicker>
                                                             <Label Content="al" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
-                                                            <DatePicker Height="30" x:Name="dp_fecha_fin_comedor" SelectedDateChanged="dp_fecha_fin_comedor_SelectedDateChanged"></DatePicker>
+                                                            <DatePicker Height="30" x:Name="dp_fecha_fin_comedor"></DatePicker>
+                                                            <Button x:Name="btn_buscar_fecha_comedor"  HorizontalAlignment="Right" Margin="10,0,10,0" Height="auto" Width="150" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center" BorderBrush="#FFBAB9B9" HorizontalContentAlignment="Center" Background="White" Click="btn_buscar_fecha_comedor_Click">Buscar por fecha</Button>
                                                         </StackPanel>
                                                     </StackPanel>
                                                     <Button x:Name="btn_refrescar_comedor" HorizontalAlignment="Right" Margin="0,0,10,10" Height="70" Width="120" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center" BorderBrush="#FFBAB9B9" HorizontalContentAlignment="Center" Background="White" Loaded="btn_refrescar_comedor_Loaded" Click="btn_refrescar_comedor_Click">Actualizar</Button>
@@ -490,8 +491,8 @@
                                                             </ComboBox>-->
                                                             <DatePicker Height="30" x:Name="dp_fecha_inicio"></DatePicker>
                                                             <Label Content="al" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
-                                                            <DatePicker Height="30" x:Name="dp_fecha_fin" SelectedDateChanged="dp_fecha_fin_SelectedDateChanged"></DatePicker>
-
+                                                            <DatePicker Height="30" x:Name="dp_fecha_fin"></DatePicker>
+                                                            <Button x:Name="btn_buscar_fecha_ventas"  HorizontalAlignment="Right" Margin="10,0,10,0" Height="auto" Width="150" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center" BorderBrush="#FFBAB9B9" HorizontalContentAlignment="Center" Background="White" Click="btn_buscar_fecha_ventas_Click">Buscar por fecha</Button>
                                                             <!--<ComboBox x:Name="cb_fecha_fin" Width="195">
                                                                 <ComboBox.Background>
                                                                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
@@ -589,7 +590,8 @@
 
                                                             <DatePicker Height="30" x:Name="dp_fecha_inicio_asistencia"></DatePicker>
                                                             <Label Content="al" HorizontalAlignment="Left" FontSize="16" Margin="10,0,5,10"/>
-                                                            <DatePicker Height="30" x:Name="dp_fecha_fin_asistencia" SelectedDateChanged="dp_fecha_fin_asistencia_SelectedDateChanged"></DatePicker>
+                                                            <DatePicker Height="30" x:Name="dp_fecha_fin_asistencia"></DatePicker>
+                                                            <Button x:Name="btn_buscar_fecha_asistencia"  HorizontalAlignment="Right" Margin="10,0,10,0" Height="auto" Width="150" BorderThickness="2" Foreground="#FF434240" FontSize="16" VerticalContentAlignment="Center" BorderBrush="#FFBAB9B9" HorizontalContentAlignment="Center" Background="White" Click="btn_buscar_fecha_asistencia_Click">Buscar por fecha</Button>
                                                             <Label Content="NOTA: Colocar null en caso de no &#xD;&#xA;contar con uno de los apellidos." HorizontalAlignment="Left" FontSize="16" Margin="20,0,0,0" Foreground="#FFFFA51B" FontWeight="Bold"/>
                                                         </StackPanel>
                                                     </StackPanel>
