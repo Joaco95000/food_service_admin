@@ -646,22 +646,41 @@ namespace food_service_admin
 
         private void btn_exportar_excel_general_Click(object sender, RoutedEventArgs e)
         {
- 
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
-            ReporteImpl reporteImpl = new ReporteImpl();
-            System.Data.DataTable dt = new System.Data.DataTable();
-            bool fecha = false;
 
-            if (dp_fecha_inicio_general.SelectedDate.ToString() != "" && dp_fecha_fin_general.SelectedDate.ToString() != "")
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
+            string fechaInicioGeneral = "";
+            string fechaFinGeneral = "";
+            this.Dispatcher.Invoke(() =>
             {
-                var fechaInicioGeneral = dp_fecha_inicio_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
-                var fechaFinGeneral = dp_fecha_fin_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                try
+                {
+                    fechaInicioGeneral = dp_fecha_inicio_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                    fechaFinGeneral = dp_fecha_fin_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
+                }
+                catch (Exception)
+                {
+                    fechaInicioGeneral = "";
+                    fechaFinGeneral = "";
+                }
+                
+            });
+            BusyIndicadorGeneral.IsBusy = true;
+            var worker = new BackgroundWorker();           
+            worker.DoWork += (s, ev) => cargarMetodoGeneral(fechaInicioGeneral, fechaFinGeneral);
+            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorGeneral.IsBusy = false;
+            worker.RunWorkerAsync();
+            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
+        }
+
+        private void cargarMetodoGeneral(string inicio, string final)
+        {
+            ReporteImpl reporteImpl = new ReporteImpl();
+            System.Data.DataTable dt;
+            bool fecha = false;
+            if (inicio != "" && final != "")
+            {            
                 var totalesloncjes = reporteImpl.armarConsultaCantidadLonchesFecha();
-                BusyIndicadorSnack.IsBusy = true;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (s, ev) => dt = reporteImpl.mostrarDatosGeneralPorFechaParaExcel(totalesloncjes[0], totalesloncjes[1], fechaInicioGeneral, fechaFinGeneral);
-                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorSnack.IsBusy = false;
-                worker.RunWorkerAsync();
+                dt = reporteImpl.mostrarDatosGeneralPorFechaParaExcel(totalesloncjes[0], totalesloncjes[1], inicio, final);
                 fecha = true;
             }
             else
@@ -669,7 +688,6 @@ namespace food_service_admin
                 var totalesloncjes = reporteImpl.armarConsultaCantidadLonches();
                 dt = reporteImpl.mostrarDatosGeneralParaExcel(totalesloncjes[0], totalesloncjes[1]);
             }
-           
             List<string> names = new List<string>();
             double total = 0;
             foreach (DataColumn column in dt.Columns)
@@ -692,23 +710,12 @@ namespace food_service_admin
 
             if (fecha == true)
             {
-                BusyIndicadorSnack.IsBusy = true;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (s, ev) => exportarExcelGeneralFechas(dt, "Reporte General");
-                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorSnack.IsBusy = false;
-                worker.RunWorkerAsync();
+                exportarExcelGeneralFechas(dt, "Reporte General");
             }
             else
             {
-                BusyIndicadorSnack.IsBusy = true;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte General");
-                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorSnack.IsBusy = false;
-                worker.RunWorkerAsync();
+                exportarExcel(dt, "Reporte General");
             }
-            
-
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
         }
 
         private void btn_exportar_excel_comedor_Click(object sender, RoutedEventArgs e)

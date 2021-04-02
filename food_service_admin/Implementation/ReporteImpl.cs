@@ -403,7 +403,7 @@ namespace Implementation
 
         public DataTable mostrarDatosGeneralParaExcel(string cantidadLonches, string totalLonches)
         {
-            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.codigo) AS '№', C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+            string query = @"SELECT C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
                             + cantidadLonches +
