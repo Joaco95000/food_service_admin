@@ -646,17 +646,23 @@ namespace food_service_admin
 
         private void btn_exportar_excel_general_Click(object sender, RoutedEventArgs e)
         {
+ 
             System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Generando Reporte: {1} Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
             ReporteImpl reporteImpl = new ReporteImpl();
-            System.Data.DataTable dt;
+            System.Data.DataTable dt = new System.Data.DataTable();
+            bool fecha = false;
 
             if (dp_fecha_inicio_general.SelectedDate.ToString() != "" && dp_fecha_fin_general.SelectedDate.ToString() != "")
             {
                 var fechaInicioGeneral = dp_fecha_inicio_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
                 var fechaFinGeneral = dp_fecha_fin_general.SelectedDate.Value.Date.ToString("yyyy-MM-dd");
                 var totalesloncjes = reporteImpl.armarConsultaCantidadLonchesFecha();
-                dt = reporteImpl.mostrarDatosGeneralPorFechaParaExcel(totalesloncjes[0], totalesloncjes[1], fechaInicioGeneral, fechaFinGeneral);    
-                //ARREGLAR TIEMPO DE RESPUESTA
+                BusyIndicadorSnack.IsBusy = true;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (s, ev) => dt = reporteImpl.mostrarDatosGeneralPorFechaParaExcel(totalesloncjes[0], totalesloncjes[1], fechaInicioGeneral, fechaFinGeneral);
+                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorSnack.IsBusy = false;
+                worker.RunWorkerAsync();
+                fecha = true;
             }
             else
             {
@@ -673,6 +679,7 @@ namespace food_service_admin
                     names.Add(column.ColumnName);
                 }
             }
+
             foreach (DataRow row in dt.Rows)
             {
                 foreach (var name in names)
@@ -683,11 +690,24 @@ namespace food_service_admin
                 total = 0;
             }
 
-            BusyIndicadorGeneral.IsBusy = true;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte General");
-            worker.RunWorkerCompleted += (s, ev) => BusyIndicadorGeneral.IsBusy = false;
-            worker.RunWorkerAsync();  
+            if (fecha == true)
+            {
+                BusyIndicadorSnack.IsBusy = true;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (s, ev) => exportarExcelGeneralFechas(dt, "Reporte General");
+                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorSnack.IsBusy = false;
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                BusyIndicadorSnack.IsBusy = true;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (s, ev) => exportarExcel(dt, "Reporte General");
+                worker.RunWorkerCompleted += (s, ev) => BusyIndicadorSnack.IsBusy = false;
+                worker.RunWorkerAsync();
+            }
+            
+
             System.Diagnostics.Debug.WriteLine(string.Format("{0} |-| Info: Reporte {1} Exportado Por el {2}", DateTime.Now, "General", Sesion.verInfo()));
         }
 
@@ -733,7 +753,72 @@ namespace food_service_admin
         #endregion
 
         #region Excel
+        public void exportarExcelGeneralFechas(System.Data.DataTable dt, string titulo)
+        {
+            object misValue = System.Reflection.Missing.Value;
+            Excel.Application appExcel = null;
+            Workbook excelWorkbook = null;
+            Worksheet excelWorksheet = null;
+            try
+            {
+                appExcel = new Excel.Application();
+                excelWorkbook = appExcel.Workbooks.Add(misValue);
 
+                excelWorksheet = appExcel.ActiveWorkbook.ActiveSheet as Worksheet;
+
+                Range columnsNameRange;
+                columnsNameRange = excelWorksheet.get_Range("A1", misValue).get_Resize(1, dt.Columns.Count);
+
+                string[] arrColumnNames = new string[dt.Columns.Count];
+
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    arrColumnNames[i] = dt.Columns[i].ColumnName;
+                }
+
+                columnsNameRange.set_Value(misValue, arrColumnNames);
+                columnsNameRange.Font.Bold = true;
+
+                int x = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    excelWorksheet.Range["J2"].Offset[x].Resize[1, 10].HorizontalAlignment = XlHAlign.xlHAlignRight;
+                    if (double.Parse(row["Valor total"].ToString()) != 0)
+                    {
+                        excelWorksheet.Range["A2"].Offset[x].Resize[1, dt.Columns.Count].Value = dt.Rows[x].ItemArray;
+                        x++;
+                    }
+                    else
+                    {
+                        x++;
+                    }                   
+                }
+
+                columnsNameRange.Rows["1"].Cells.Orientation = Excel.XlOrientation.xlUpward;
+
+                Range line = (Range)columnsNameRange.Rows[1];
+                line.Insert();
+                columnsNameRange.Columns.EntireColumn.AutoFit();
+
+                var range = excelWorksheet.UsedRange;
+                range.SpecialCells(XlCellType.xlCellTypeConstants).EntireRow.Hidden = true;
+                range.SpecialCells(XlCellType.xlCellTypeVisible).Delete(XlDeleteShiftDirection.xlShiftUp);
+                range.EntireRow.Hidden = false;
+
+                var fechaDoc = DateTime.Now.ToString("ddMMyyyyHHmmss");
+                var fechaTit = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+                var tituloCompletoDoc = titulo + " " + fechaDoc;
+                var tituloCompletoTit = titulo + " " + fechaTit;
+                excelWorkbook.SaveAs(tituloCompletoDoc);
+                MessageBox.Show(tituloCompletoTit + " exportado con exito en Documentos", "Exportacion de Excel", MessageBoxButton.OK, MessageBoxImage.Information);
+                appExcel.Visible = true;
+            }
+            catch (Exception ex) 
+            { 
+                MessageBox.Show(ex.ToString()); 
+            }
+ 
+        }   
         public void exportarExcel(System.Data.DataTable dt, string titulo)
         {
             object misValue= System.Reflection.Missing.Value;
@@ -2015,8 +2100,6 @@ namespace food_service_admin
         private void btn_limpiar_codigo_Loaded(object sender, RoutedEventArgs e)
         {
             ListarUsusarios();
-        }
-
-        
+        }       
     }
 }

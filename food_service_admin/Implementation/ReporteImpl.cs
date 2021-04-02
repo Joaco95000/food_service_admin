@@ -403,7 +403,7 @@ namespace Implementation
 
         public DataTable mostrarDatosGeneralParaExcel(string cantidadLonches, string totalLonches)
         {
-            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.nombre, C.paterno, C.materno) AS '№' , C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.codigo) AS '№', C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
                             (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
                             + cantidadLonches +
@@ -433,20 +433,22 @@ namespace Implementation
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0} | {1} |-| Info: Intentando sacar reporte General del: {2} al {3}", DateTime.Now, Sesion.verInfo(), fecha_inicio, fecha_fin));
             DataTable dt = new DataTable();
-            string query = @"SELECT ROW_NUMBER() OVER(ORDER BY C.nombre, C.paterno, C.materno) AS '№' , C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
-                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Almuerzo,
-                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO') AS Cena,"
+            string query = @"SELECT C.codigo AS Codigo ,ISNULL(C.nombre,'')+' '+ISNULL(C.paterno,'')+' '+ISNULL(C.materno,'') AS 'Nombre Completo',
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal) AS Almuerzo,
+                            (SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal) AS Cena,"
                             + cantidadLonches +
-                            @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*12) AS 'Total Almuerzo', 
-                            ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO')*10) AS 'Total Cena',"
+                            @"((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='ALMUERZO' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal)*12) AS 'Total Almuerzo', 
+                            ((SELECT COUNT(RE.turno) FROM registro AS RE WHERE RE.turno='CENA' AND RE.cliente=R.cliente AND RE.estado='ACTIVO' AND RE.fecha >= @fechaInicio AND RE.fecha <= @fechaFinal)*10) AS 'Total Cena',"
                             + totalLonches +
-                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO'),0) AS 'Total Snack', '' AS 'Valor total'
+                            @"ISNULL((select sum(S.total) from snack AS S INNER JOIN item as I ON S.item=I.id where S.cliente=R.cliente AND I.nombre NOT LIKE '%lonche%' AND S.estado='ACTIVO' AND S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal),0) AS 'Total Snack', '' AS 'Valor total'
                             FROM registro AS  R
                             INNER JOIN cliente C
                             ON R.cliente = C.id
-                            WHERE R.fecha >= @fechaInicio AND R.fecha <= @fechaFinal    
-                            GROUP BY C.codigo, r.cliente, C.nombre,C.paterno,C.materno
-                            ORDER BY C.nombre,C.paterno,C.materno";
+                            INNER JOIN snack S
+							ON S.cliente = R.cliente
+                            WHERE R.fecha >= @fechaInicio AND R.fecha <= @fechaFinal OR S.fecha >= @fechaInicio AND S.fecha <= @fechaFinal
+                            GROUP BY C.id, C.codigo, r.cliente, C.nombre,C.paterno,C.materno
+                            ORDER BY C.id";
             try
             {
                 SqlCommand cmd = DBImplementation.CreateBasicCommand(query);
